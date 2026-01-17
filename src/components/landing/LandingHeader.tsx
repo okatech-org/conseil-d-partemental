@@ -1,25 +1,20 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { 
   MapPin, 
   Menu, 
-  X, 
-  ChevronDown,
   LogIn,
-  UserPlus
+  UserPlus,
+  Sun,
+  Moon
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useTheme } from "next-themes";
 
 const navItems = [
   { label: "Accueil", href: "/" },
@@ -42,6 +37,12 @@ const modules = [
 const LandingHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,6 +51,9 @@ const LandingHeader = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const isDark = resolvedTheme === "dark";
+  const toggleTheme = () => setTheme(isDark ? "light" : "dark");
 
   return (
     <motion.header
@@ -93,8 +97,21 @@ const LandingHeader = () => {
             ))}
           </nav>
 
-          {/* Auth Buttons - Desktop */}
+          {/* Auth Buttons & Theme Toggle - Desktop */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* Theme Toggle */}
+            {mounted && (
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={toggleTheme}
+                className={`relative overflow-hidden ${!isScrolled ? "text-white hover:bg-white/10" : ""}`}
+                aria-label={isDark ? "Passer au mode clair" : "Passer au mode sombre"}
+              >
+                <Sun className={`h-5 w-5 transition-all duration-300 ${isDark ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
+                <Moon className={`absolute h-5 w-5 transition-all duration-300 ${isDark ? "rotate-90 scale-0" : "rotate-0 scale-100"}`} />
+              </Button>
+            )}
             <Button 
               variant={isScrolled ? "ghost" : "outline"} 
               size="sm"
@@ -145,6 +162,26 @@ const LandingHeader = () => {
                 </nav>
 
                 <div className="space-y-3 pt-6 border-t border-border">
+                  {/* Mobile Theme Toggle */}
+                  {mounted && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={toggleTheme}
+                    >
+                      {isDark ? (
+                        <>
+                          <Sun className="mr-2 h-4 w-4" />
+                          Mode clair
+                        </>
+                      ) : (
+                        <>
+                          <Moon className="mr-2 h-4 w-4" />
+                          Mode sombre
+                        </>
+                      )}
+                    </Button>
+                  )}
                   <Button variant="outline" className="w-full" onClick={() => setMobileOpen(false)}>
                     <LogIn className="mr-2 h-4 w-4" />
                     Connexion
