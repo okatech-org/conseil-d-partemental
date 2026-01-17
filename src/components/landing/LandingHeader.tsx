@@ -53,7 +53,17 @@ const LandingHeader = () => {
   }, []);
 
   const isDark = resolvedTheme === "dark";
-  const toggleTheme = () => setTheme(isDark ? "light" : "dark");
+  
+  const toggleTheme = () => {
+    // Add transition class for smooth animation
+    document.documentElement.classList.add('theme-transition');
+    setTheme(isDark ? "light" : "dark");
+    
+    // Remove class after transition completes
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transition');
+    }, 400);
+  };
 
   return (
     <motion.header
