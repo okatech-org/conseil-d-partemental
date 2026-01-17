@@ -4,7 +4,7 @@ import {
   Building2, Users, Crown, Briefcase, Network, HardHat, ClipboardCheck,
   MapPin, ChevronRight, Check, Info, FileText, Wallet, Shield, 
   TreePine, TrendingUp, Heart, Palette, ArrowLeft, ExternalLink,
-  AlertCircle, Sparkles, Globe, Phone, Mail, Clock
+  AlertCircle, Sparkles, Globe, Phone, Mail, Clock, Map
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useNavigate } from 'react-router-dom';
+import GabonMap from '@/components/maps/GabonMap';
 import { 
   provincesData, 
   profileTypes, 
@@ -614,22 +615,95 @@ export const DemoConseillPage = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {provincesData.map((province, index) => (
-                  <motion.div
-                    key={province.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.08 }}
-                  >
-                    <ProvinceCard
-                      province={province}
-                      isSelected={selectedProvince?.id === province.id}
-                      onClick={() => handleProvinceSelect(province)}
-                    />
-                  </motion.div>
-                ))}
-              </div>
+              <Tabs defaultValue="map" className="w-full">
+                <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-6">
+                  <TabsTrigger value="map" className="flex items-center gap-2">
+                    <Map className="h-4 w-4" />
+                    Carte Interactive
+                  </TabsTrigger>
+                  <TabsTrigger value="grid" className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4" />
+                    Liste Provinces
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="map">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Interactive Map */}
+                    <Card className="p-4">
+                      <GabonMap 
+                        selectedProvince={selectedProvince?.id || null}
+                        onProvinceSelect={(provinceId) => {
+                          const province = provincesData.find(p => p.id === provinceId);
+                          if (province) {
+                            handleProvinceSelect(province);
+                          }
+                        }}
+                      />
+                    </Card>
+
+                    {/* Province List Sidebar */}
+                    <div className="space-y-3">
+                      <h3 className="font-semibold text-lg flex items-center gap-2">
+                        <MapPin className="h-5 w-5 text-primary" />
+                        Provinces du Gabon
+                      </h3>
+                      <ScrollArea className="h-[450px] pr-4">
+                        <div className="space-y-2">
+                          {provincesData.map((province) => (
+                            <motion.div
+                              key={province.id}
+                              whileHover={{ x: 4 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <Card 
+                                className={`cursor-pointer transition-all p-3 ${
+                                  selectedProvince?.id === province.id 
+                                    ? 'ring-2 ring-primary bg-primary/5' 
+                                    : 'hover:bg-muted/50'
+                                }`}
+                                onClick={() => handleProvinceSelect(province)}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className={`w-10 h-10 rounded-lg ${province.color} flex items-center justify-center`}>
+                                    <MapPin className="h-5 w-5 text-white" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="font-medium">{province.name}</div>
+                                    <div className="text-xs text-muted-foreground">
+                                      {province.capital} • {province.departments.length} dép.
+                                    </div>
+                                  </div>
+                                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                              </Card>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="grid">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {provincesData.map((province, index) => (
+                      <motion.div
+                        key={province.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.08 }}
+                      >
+                        <ProvinceCard
+                          province={province}
+                          isSelected={selectedProvince?.id === province.id}
+                          onClick={() => handleProvinceSelect(province)}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
             </motion.div>
           )}
 
