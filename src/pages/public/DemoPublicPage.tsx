@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { MonitorPlay, Play, Pause, SkipForward, ChevronRight, Users, FileText, HelpCircle, ToggleLeft, ToggleRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  MonitorPlay, Play, ChevronRight, Users, FileText, HelpCircle, 
+  ToggleLeft, ToggleRight, Crown, Building2, Briefcase, UserCheck,
+  Landmark, Shield, Wallet, Users2, HardHat, Scale, TreeDeciduous,
+  GraduationCap, Heart, Truck, MapPin, X, Check, Mail, Lock
+} from "lucide-react";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { InstitutionSubHeader } from "@/components/layout/InstitutionSubHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +13,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { useNavigate } from "react-router-dom";
 
 const scenarios = [
   {
@@ -64,15 +72,195 @@ const sandboxFeatures = [
   { id: "bookmarks", label: "Favoris et signets", enabled: true },
 ];
 
+// Profils d'accès pour les acteurs du conseil départemental
+const accessProfiles = [
+  {
+    id: "executif",
+    title: "Exécutif Départemental",
+    subtitle: "Direction du Conseil Départemental",
+    icon: Crown,
+    color: "from-amber-500 to-orange-600",
+    bgColor: "bg-amber-50 dark:bg-amber-950/20",
+    borderColor: "border-amber-200 dark:border-amber-800",
+    accounts: [
+      { role: "Président du Conseil", email: "president@demo.conseil.ga", permissions: ["Toutes"] },
+      { role: "Vice-président Finances", email: "vp.finances@demo.conseil.ga", permissions: ["Budget", "Marchés"] },
+      { role: "Vice-président Social", email: "vp.social@demo.conseil.ga", permissions: ["Action Sociale", "Solidarité"] },
+    ],
+    module: "Gestion du Conseil",
+    moduleIcon: Landmark,
+  },
+  {
+    id: "conseillers",
+    title: "Conseillers Départementaux",
+    subtitle: "Élus du Département",
+    icon: Users2,
+    color: "from-blue-500 to-indigo-600",
+    bgColor: "bg-blue-50 dark:bg-blue-950/20",
+    borderColor: "border-blue-200 dark:border-blue-800",
+    accounts: [
+      { role: "Conseiller - Commission Finances", email: "conseiller.finances@demo.conseil.ga", permissions: ["Budget", "Délibérations"] },
+      { role: "Conseiller - Commission Routes", email: "conseiller.routes@demo.conseil.ga", permissions: ["Voirie", "Aménagement"] },
+      { role: "Conseiller - Commission Social", email: "conseiller.social@demo.conseil.ga", permissions: ["Solidarité", "PMI"] },
+    ],
+    module: "Gestion du Conseil",
+    moduleIcon: Landmark,
+  },
+  {
+    id: "secretariat",
+    title: "Secrétariat Général",
+    subtitle: "Administration centrale",
+    icon: Building2,
+    color: "from-slate-500 to-gray-700",
+    bgColor: "bg-slate-50 dark:bg-slate-950/20",
+    borderColor: "border-slate-200 dark:border-slate-800",
+    accounts: [
+      { role: "Secrétaire Général", email: "sg@demo.conseil.ga", permissions: ["Administration", "RH", "Budget"] },
+      { role: "Directeur Juridique", email: "dir.juridique@demo.conseil.ga", permissions: ["Conformité", "Marchés"] },
+      { role: "Chef de Cabinet", email: "cabinet@demo.conseil.ga", permissions: ["Communication", "Agenda"] },
+    ],
+    module: "Tutelle & Conformité",
+    moduleIcon: Shield,
+  },
+  {
+    id: "finances",
+    title: "Direction des Finances",
+    subtitle: "Budget & Comptabilité",
+    icon: Wallet,
+    color: "from-emerald-500 to-teal-600",
+    bgColor: "bg-emerald-50 dark:bg-emerald-950/20",
+    borderColor: "border-emerald-200 dark:border-emerald-800",
+    accounts: [
+      { role: "Directeur Financier", email: "dir.finances@demo.conseil.ga", permissions: ["Budget", "Comptabilité"] },
+      { role: "Responsable Budget", email: "resp.budget@demo.conseil.ga", permissions: ["Prévisions", "Suivi"] },
+      { role: "Contrôleur de Gestion", email: "controleur@demo.conseil.ga", permissions: ["Audit", "Reporting"] },
+    ],
+    module: "Budget & Finances",
+    moduleIcon: Wallet,
+  },
+  {
+    id: "rh",
+    title: "Ressources Humaines",
+    subtitle: "Gestion du Personnel",
+    icon: UserCheck,
+    color: "from-rose-500 to-pink-600",
+    bgColor: "bg-rose-50 dark:bg-rose-950/20",
+    borderColor: "border-rose-200 dark:border-rose-800",
+    accounts: [
+      { role: "DRH", email: "drh@demo.conseil.ga", permissions: ["Personnel", "Paie", "Formation"] },
+      { role: "Responsable Recrutement", email: "recrutement@demo.conseil.ga", permissions: ["Recrutement", "Concours"] },
+      { role: "Gestionnaire Carrières", email: "carrieres@demo.conseil.ga", permissions: ["Avancement", "Mutations"] },
+    ],
+    module: "Ressources Humaines",
+    moduleIcon: Users,
+  },
+  {
+    id: "directions",
+    title: "Directions Sectorielles",
+    subtitle: "Services opérationnels",
+    icon: Briefcase,
+    color: "from-violet-500 to-purple-600",
+    bgColor: "bg-violet-50 dark:bg-violet-950/20",
+    borderColor: "border-violet-200 dark:border-violet-800",
+    accounts: [
+      { role: "Dir. Urbanisme & Cadastre", email: "dir.urbanisme@demo.conseil.ga", permissions: ["Aménagement", "Permis"], domain: "Aménagement" },
+      { role: "Dir. Action Sociale", email: "dir.social@demo.conseil.ga", permissions: ["RSA", "Handicap", "PA"], domain: "Social" },
+      { role: "Dir. Éducation", email: "dir.education@demo.conseil.ga", permissions: ["Collèges", "Transport scolaire"], domain: "Éducation" },
+      { role: "Dir. Routes", email: "dir.routes@demo.conseil.ga", permissions: ["Voirie", "Entretien"], domain: "Infrastructure" },
+    ],
+    module: "Patrimoine & Projets",
+    moduleIcon: MapPin,
+  },
+  {
+    id: "terrain",
+    title: "Agents de Terrain",
+    subtitle: "Services techniques",
+    icon: HardHat,
+    color: "from-orange-500 to-amber-600",
+    bgColor: "bg-orange-50 dark:bg-orange-950/20",
+    borderColor: "border-orange-200 dark:border-orange-800",
+    accounts: [
+      { role: "Agent Routes Secteur Nord", email: "agent.routes.nord@demo.conseil.ga", permissions: ["Interventions", "Signalements"] },
+      { role: "Agent Bâtiments", email: "agent.batiments@demo.conseil.ga", permissions: ["Maintenance", "Travaux"] },
+      { role: "Agent Espaces Verts", email: "agent.espaces@demo.conseil.ga", permissions: ["Entretien", "Plantations"] },
+    ],
+    module: "Patrimoine & Projets",
+    moduleIcon: MapPin,
+  },
+  {
+    id: "commissions",
+    title: "Commissions & Comités",
+    subtitle: "Instances délibératives",
+    icon: Scale,
+    color: "from-cyan-500 to-sky-600",
+    bgColor: "bg-cyan-50 dark:bg-cyan-950/20",
+    borderColor: "border-cyan-200 dark:border-cyan-800",
+    accounts: [
+      { role: "Président Commission Finances", email: "president.commission.finances@demo.conseil.ga", permissions: ["Délibérations Finances"] },
+      { role: "Président Commission Social", email: "president.commission.social@demo.conseil.ga", permissions: ["Délibérations Social"] },
+      { role: "Président Commission Environnement", email: "president.commission.env@demo.conseil.ga", permissions: ["Délibérations Environnement"] },
+    ],
+    module: "Gestion du Conseil",
+    moduleIcon: Landmark,
+  },
+  {
+    id: "citoyen",
+    title: "Portail Citoyen",
+    subtitle: "Accès public",
+    icon: Heart,
+    color: "from-red-500 to-rose-600",
+    bgColor: "bg-red-50 dark:bg-red-950/20",
+    borderColor: "border-red-200 dark:border-red-800",
+    accounts: [
+      { role: "Citoyen", email: "citoyen@demo.conseil.ga", permissions: ["Consultation", "Demandes d'aides"] },
+      { role: "Association", email: "association@demo.conseil.ga", permissions: ["Subventions", "Réservations"] },
+      { role: "Entreprise", email: "entreprise@demo.conseil.ga", permissions: ["Marchés publics", "Appels d'offres"] },
+    ],
+    module: "Portail Citoyen",
+    moduleIcon: Heart,
+  },
+];
+
+// Modules avec leurs icônes et couleurs
+const modulesList = [
+  { name: "Gestion du Conseil", icon: Landmark, color: "text-amber-600 dark:text-amber-400" },
+  { name: "Budget & Finances", icon: Wallet, color: "text-emerald-600 dark:text-emerald-400" },
+  { name: "Tutelle & Conformité", icon: Shield, color: "text-slate-600 dark:text-slate-400" },
+  { name: "Ressources Humaines", icon: Users, color: "text-rose-600 dark:text-rose-400" },
+  { name: "Patrimoine & Projets", icon: MapPin, color: "text-violet-600 dark:text-violet-400" },
+  { name: "Portail Citoyen", icon: Heart, color: "text-red-600 dark:text-red-400" },
+];
+
+interface SelectedAccount {
+  profile: typeof accessProfiles[0];
+  account: typeof accessProfiles[0]["accounts"][0];
+}
+
 export const DemoPublicPage = () => {
   const [demoMode, setDemoMode] = useState(false);
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
   const [features, setFeatures] = useState(sandboxFeatures);
+  const [selectedAccount, setSelectedAccount] = useState<SelectedAccount | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const navigate = useNavigate();
 
   const toggleFeature = (id: string) => {
     setFeatures(prev => prev.map(f => 
       f.id === id ? { ...f, enabled: !f.enabled } : f
     ));
+  };
+
+  const handleAccountSelect = (profile: typeof accessProfiles[0], account: typeof accessProfiles[0]["accounts"][0]) => {
+    setSelectedAccount({ profile, account });
+  };
+
+  const handleConnect = () => {
+    setIsConnecting(true);
+    setTimeout(() => {
+      setIsConnecting(false);
+      setSelectedAccount(null);
+      navigate("/dashboard");
+    }, 1500);
   };
 
   return (
@@ -124,6 +312,92 @@ export const DemoPublicPage = () => {
             </CardContent>
           )}
         </Card>
+
+        {/* Quick Access Modules */}
+        <div>
+          <h2 className="text-2xl font-bold font-serif mb-6">Accès aux Modules</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {modulesList.map((module, index) => (
+              <motion.div
+                key={module.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Card className="h-full hover:shadow-lg transition-all duration-300 cursor-pointer group text-center p-4">
+                  <module.icon className={`h-8 w-8 mx-auto mb-3 ${module.color} group-hover:scale-110 transition-transform`} />
+                  <p className="font-medium text-sm">{module.name}</p>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Access Profiles Section */}
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold font-serif">Comptes d'accès démo</h2>
+              <p className="text-muted-foreground mt-1">
+                Sélectionnez un profil pour accéder à la plateforme avec des permissions prédéfinies
+              </p>
+            </div>
+            <Badge variant="outline" className="text-sm">
+              {accessProfiles.reduce((acc, p) => acc + p.accounts.length, 0)} comptes disponibles
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {accessProfiles.map((profile, index) => (
+              <motion.div
+                key={profile.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Card className={`h-full ${profile.bgColor} ${profile.borderColor} border-2 hover:shadow-xl transition-all duration-300 overflow-hidden`}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${profile.color} flex items-center justify-center shadow-lg`}>
+                        <profile.icon className="h-6 w-6 text-white" />
+                      </div>
+                      <Badge variant="secondary" className="text-xs flex items-center gap-1">
+                        <profile.moduleIcon className="h-3 w-3" />
+                        {profile.module}
+                      </Badge>
+                    </div>
+                    <CardTitle className="mt-3">{profile.title}</CardTitle>
+                    <CardDescription>{profile.subtitle}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <Separator className="mb-4" />
+                    <div className="space-y-2">
+                      {profile.accounts.map((account, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleAccountSelect(profile, account)}
+                          className="w-full text-left p-3 rounded-lg bg-background/60 hover:bg-background border border-border/50 hover:border-primary/50 transition-all duration-200 group"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">
+                                {account.role}
+                              </p>
+                              <p className="text-xs text-muted-foreground truncate mt-0.5">
+                                {account.email}
+                              </p>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
         {/* Guided Scenarios */}
         <div>
@@ -272,6 +546,102 @@ export const DemoPublicPage = () => {
           </Card>
         </div>
       </div>
+
+      {/* Connection Confirmation Modal */}
+      <AnimatePresence>
+        {selectedAccount && (
+          <Dialog open={!!selectedAccount} onOpenChange={() => setSelectedAccount(null)}>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${selectedAccount.profile.color} flex items-center justify-center`}>
+                    <selectedAccount.profile.icon className="h-5 w-5 text-white" />
+                  </div>
+                  Connexion Démo
+                </DialogTitle>
+                <DialogDescription>
+                  Vous allez accéder à la plateforme avec le profil sélectionné
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4 py-4">
+                {/* Profile Info */}
+                <div className={`p-4 rounded-lg ${selectedAccount.profile.bgColor} ${selectedAccount.profile.borderColor} border`}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <selectedAccount.profile.moduleIcon className="h-5 w-5 text-muted-foreground" />
+                    <span className="font-medium">{selectedAccount.profile.module}</span>
+                  </div>
+                  <Separator className="my-3" />
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">Profil:</span>
+                      <span className="font-medium text-sm">{selectedAccount.account.role}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">Email:</span>
+                      <span className="font-mono text-sm text-primary">{selectedAccount.account.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Lock className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">Mot de passe:</span>
+                      <span className="font-mono text-sm">••••••••</span>
+                      <Badge variant="outline" className="text-xs">demo</Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Permissions */}
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Permissions accordées:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedAccount.account.permissions.map((perm, idx) => (
+                      <Badge key={idx} variant="secondary" className="text-xs">
+                        <Check className="h-3 w-3 mr-1" />
+                        {perm}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => setSelectedAccount(null)}
+                  >
+                    <X className="h-4 w-4 mr-2" />
+                    Annuler
+                  </Button>
+                  <Button
+                    className={`flex-1 bg-gradient-to-r ${selectedAccount.profile.color} text-white hover:opacity-90`}
+                    onClick={handleConnect}
+                    disabled={isConnecting}
+                  >
+                    {isConnecting ? (
+                      <>
+                        <motion.div
+                          className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        />
+                        Connexion...
+                      </>
+                    ) : (
+                      <>
+                        <Check className="h-4 w-4 mr-2" />
+                        Se connecter
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </PublicLayout>
   );
 };
