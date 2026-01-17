@@ -22,11 +22,12 @@ import {
 } from "@/components/ui/sheet";
 
 const navItems = [
-  { label: "Accueil", href: "#" },
-  { label: "Modules", href: "#modules", hasDropdown: true },
-  { label: "Fonctionnalités", href: "#features" },
-  { label: "Témoignages", href: "#testimonials" },
-  { label: "Contact", href: "#contact" }
+  { label: "Accueil", href: "/" },
+  { label: "Actualités", href: "/actualites" },
+  { label: "Sensibilisation", href: "/sensibilisation" },
+  { label: "Tutoriels", href: "/tutoriels" },
+  { label: "Processus", href: "/processus" },
+  { label: "Démo", href: "/demo" }
 ];
 
 const modules = [
@@ -78,39 +79,17 @@ const LandingHeader = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
-              item.hasDropdown ? (
-                <DropdownMenu key={item.label}>
-                  <DropdownMenuTrigger asChild>
-                    <button className={`flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                      isScrolled 
-                        ? "text-foreground hover:bg-muted" 
-                        : "text-white/90 hover:text-white hover:bg-white/10"
-                    }`}>
-                      {item.label}
-                      <ChevronDown className="h-4 w-4" />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="center" className="w-48">
-                    {modules.map((module) => (
-                      <DropdownMenuItem key={module.label} asChild>
-                        <a href={module.href}>{module.label}</a>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    isScrolled 
-                      ? "text-foreground hover:bg-muted" 
-                      : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  {item.label}
-                </a>
-              )
+              <a
+                key={item.label}
+                href={item.href}
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  isScrolled 
+                    ? "text-foreground hover:bg-muted" 
+                    : "text-white/90 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {item.label}
+              </a>
             ))}
           </nav>
 
