@@ -14,6 +14,7 @@ import { TutellePage } from "./pages/tutelle/TutellePage";
 import { RHPage } from "./pages/rh/RHPage";
 import { PatrimoinePage } from "./pages/patrimoine/PatrimoinePage";
 import { CitoyenPage } from "./pages/citoyen/CitoyenPage";
+import { DemoConseillPage } from "./pages/demo/DemoConseillPage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,9 @@ const App = () => (
           <Routes>
             {/* Public landing page */}
             <Route path="/" element={<Index />} />
+            
+            {/* Demo page */}
+            <Route path="/demo" element={<DemoConseillPage />} />
             
             {/* App routes with layout */}
             <Route path="/dashboard" element={<AppLayout><DashboardPage /></AppLayout>} />
