@@ -84,33 +84,75 @@
   }
 
   .dark {
-    --background: 222 47% 8%;
+    --background: 222 47% 6%;
     --foreground: 220 20% 95%;
 
-    --card: 222 47% 11%;
+    --card: 222 47% 10%;
     --card-foreground: 220 20% 95%;
 
-    --popover: 222 47% 11%;
+    --popover: 222 47% 10%;
     --popover-foreground: 220 20% 95%;
 
-    --primary: 45 93% 50%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 45 93% 55%;
+    --primary-foreground: 222 47% 8%;
 
-    --secondary: 222 47% 20%;
+    --secondary: 222 47% 18%;
     --secondary-foreground: 220 20% 95%;
 
-    --muted: 222 30% 18%;
-    --muted-foreground: 220 15% 60%;
+    --muted: 222 30% 14%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 152 60% 40%;
+    --accent: 152 60% 45%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 45%;
+    --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 30% 20%;
-    --input: 222 30% 20%;
-    --ring: 45 93% 50%;
+    --border: 222 30% 22%;
+    --input: 222 30% 18%;
+    --ring: 45 93% 55%;
+
+    /* Dark mode semantic colors */
+    --success: 152 60% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 100%;
+    
+    --info: 205 85% 60%;
+    --info-foreground: 0 0% 100%;
+
+    /* Dark mode province colors - increased brightness */
+    --province-estuaire: 205 75% 60%;
+    --province-haut-ogooue: 152 60% 50%;
+    --province-moyen-ogooue: 280 60% 60%;
+    --province-ngounie: 45 90% 55%;
+    --province-nyanga: 15 85% 60%;
+    --province-ogooue-ivindo: 175 65% 50%;
+    --province-ogooue-lolo: 330 70% 60%;
+    --province-ogooue-maritime: 200 70% 55%;
+    --province-woleu-ntem: 100 55% 50%;
+
+    /* Dark mode gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(222 47% 12%) 0%, hsl(222 47% 18%) 50%, hsl(205 75% 25%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(45 93% 55%) 0%, hsl(38 90% 60%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(222 47% 10%) 0%, hsl(222 47% 8%) 100%);
+    
+    /* Dark mode shadows - more subtle */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.25), 0 2px 4px -2px rgb(0 0 0 / 0.15);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.35), 0 8px 10px -6px rgb(0 0 0 / 0.25);
+    --shadow-gold: 0 4px 14px 0 hsl(45 93% 55% / 0.2);
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 220 20% 90%;
+    --sidebar-primary: 45 93% 55%;
+    --sidebar-primary-foreground: 222 47% 8%;
+    --sidebar-accent: 222 47% 16%;
+    --sidebar-accent-foreground: 220 20% 95%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 45 93% 55%;
   }
 }
 
