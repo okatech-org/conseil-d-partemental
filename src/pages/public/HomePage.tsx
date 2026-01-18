@@ -2,13 +2,17 @@ import { motion } from "framer-motion";
 import { 
   Users, CalendarDays, FileText, Vote, ArrowRight, 
   Clock, Building2, ExternalLink, ChevronRight,
-  Heart, GraduationCap, Car, Leaf
+  Heart, GraduationCap, Car, Leaf, Map
 } from "lucide-react";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useNavigate } from "react-router-dom";
+import { Suspense, lazy } from "react";
+
+const InteractiveGabonMap = lazy(() => import("@/components/maps/InteractiveGabonMap"));
 
 const stats = [
   { label: "Conseillers départementaux", value: "42", icon: Users, color: "text-blue-500" },
@@ -103,6 +107,8 @@ const competences = [
 ];
 
 export const HomePage = () => {
+  const navigate = useNavigate();
+  
   return (
     <PublicLayout>
       {/* Hero Banner */}
@@ -283,6 +289,29 @@ export const HomePage = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Interactive Map Section */}
+      <div className="container mx-auto px-4 pb-12">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold font-serif">Carte des 42 Conseils Départementaux</h2>
+            <p className="text-muted-foreground mt-1">Explorez les conseils départementaux du Gabon</p>
+          </div>
+          <Button variant="outline" className="group" onClick={() => navigate('/conseils')}>
+            <Map className="mr-2 h-4 w-4" />
+            Voir tout
+            <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </div>
+        
+        <Suspense fallback={
+          <div className="h-[400px] bg-muted rounded-xl animate-pulse flex items-center justify-center">
+            <span className="text-muted-foreground">Chargement de la carte...</span>
+          </div>
+        }>
+          <InteractiveGabonMap height="400px" />
+        </Suspense>
       </div>
 
       {/* Quick Access Cards */}
