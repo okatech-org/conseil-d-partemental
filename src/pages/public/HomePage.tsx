@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-const GabonDepartmentsMap = lazy(() => import("@/components/maps/GabonDepartmentsMap"));
+const MapboxGabonMap = lazy(() => import("@/components/maps/MapboxGabonMap"));
 
 const stats = [
   { label: "Conseillers départementaux", value: "42", icon: Users, color: "text-blue-500" },
@@ -306,11 +306,11 @@ export const HomePage = () => {
         </div>
         
         <Suspense fallback={
-          <div className="h-[400px] bg-muted rounded-xl animate-pulse flex items-center justify-center">
+          <div className="h-[500px] bg-muted rounded-xl animate-pulse flex items-center justify-center">
             <span className="text-muted-foreground">Chargement de la carte...</span>
           </div>
         }>
-          <GabonDepartmentsMap showLoginButtons={false} />
+          <MapboxGabonMap height="500px" showStats={true} showLoginButtons={false} />
         </Suspense>
       </div>
 
