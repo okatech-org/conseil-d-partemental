@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useNavigate, Link } from 'react-router-dom';
-import GabonDepartmentsMap from '@/components/maps/GabonDepartmentsMap';
+import MapboxGabonMap from '@/components/maps/MapboxGabonMap';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { provincesData, getTotalDemoStats } from '@/lib/departments-data';
 
@@ -142,10 +142,11 @@ export const DemoMapPage: React.FC = () => {
           </AlertDescription>
         </Alert>
 
-        <GabonDepartmentsMap
-          onDepartmentSelect={handleDepartmentSelect}
-          selectedDepartment={selectedDepartment}
+        <MapboxGabonMap
+          height="550px"
+          showStats={true}
           showLoginButtons={true}
+          onDepartmentSelect={(deptId) => handleDepartmentSelect(deptId, '')}
         />
 
         {/* Province overview */}
