@@ -15,6 +15,8 @@ import { RHPage } from "./pages/rh/RHPage";
 import { PatrimoinePage } from "./pages/patrimoine/PatrimoinePage";
 import { CitoyenPage } from "./pages/citoyen/CitoyenPage";
 import { DemoConseillPage } from "./pages/demo/DemoConseillPage";
+import { DemoMapPage } from "./pages/demo/DemoMapPage";
+import { ConseilHomePage } from "./pages/conseil/ConseilHomePage";
 
 // Public pages
 import { HomePage } from "./pages/public/HomePage";
@@ -42,6 +44,12 @@ const App = () => (
               <Route path="/tutoriels" element={<TutorielsPage />} />
               <Route path="/processus" element={<ProcessusPage />} />
               <Route path="/demo" element={<DemoPublicPage />} />
+              
+              {/* Map of 42 departmental councils */}
+              <Route path="/conseils" element={<DemoMapPage />} />
+              
+              {/* Individual departmental council pages */}
+              <Route path="/conseil/:departmentId" element={<ConseilHomePage />} />
               
               {/* Admin demo page */}
               <Route path="/demo-conseil" element={<DemoConseillPage />} />
