@@ -18,6 +18,7 @@ import { useTheme } from "next-themes";
 
 const navItems = [
   { label: "Accueil", href: "/" },
+  { label: "Conseils", href: "/conseils" },
   { label: "Actualités", href: "/actualites" },
   { label: "Sensibilisation", href: "/sensibilisation" },
   { label: "Tutoriels", href: "/tutoriels" },
