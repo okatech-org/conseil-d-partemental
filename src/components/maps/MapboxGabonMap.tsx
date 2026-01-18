@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { provincesData, type DepartmentDetail } from '@/lib/departments-data';
@@ -6,11 +6,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Users, Building2, TrendingUp, MapPin, LogIn } from 'lucide-react';
+import { Users, Building2, TrendingUp, MapPin, LogIn, Loader2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-// Get API key from environment variable (will be set via secrets)
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_API_KEY || '';
+import { supabase } from '@/integrations/supabase/client';
 
 // Department coordinates with real GPS positions
 const departmentCoordinates: Record<string, { lng: number; lat: number }> = {
@@ -117,6 +115,9 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
   const popupRef = useRef<mapboxgl.Popup | null>(null);
   const navigate = useNavigate();
   
+  const [mapboxToken, setMapboxToken] = useState<string | null>(null);
+  const [tokenLoading, setTokenLoading] = useState(true);
+  const [tokenError, setTokenError] = useState<string | null>(null);
   const [selectedDepartment, setSelectedDepartment] = useState<DepartmentDetail | null>(null);
   const [hoveredDepartment, setHoveredDepartment] = useState<string | null>(null);
   const [stats, setStats] = useState<DepartmentStats>({
@@ -126,6 +127,37 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
     totalBudget: 0,
   });
   const [mapLoaded, setMapLoaded] = useState(false);
+
+  // Fetch Mapbox token from Edge Function
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        setTokenLoading(true);
+        setTokenError(null);
+        
+        const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+        
+        if (error) {
+          console.error('Error fetching Mapbox token:', error);
+          setTokenError('Impossible de charger la clé Mapbox');
+          return;
+        }
+        
+        if (data?.token) {
+          setMapboxToken(data.token);
+        } else {
+          setTokenError('Clé Mapbox non configurée');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        setTokenError('Erreur de connexion');
+      } finally {
+        setTokenLoading(false);
+      }
+    };
+
+    fetchToken();
+  }, []);
 
   // Calculate real-time statistics
   useEffect(() => {
@@ -143,46 +175,8 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
     });
   }, []);
 
-  // Initialize map
-  useEffect(() => {
-    if (!mapContainer.current || !MAPBOX_TOKEN) return;
-
-    mapboxgl.accessToken = MAPBOX_TOKEN;
-
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [11.5, -0.8], // Center of Gabon
-      zoom: 5.5,
-      minZoom: 4,
-      maxZoom: 12,
-      maxBounds: [
-        [6, -5], // Southwest
-        [16, 4], // Northeast
-      ],
-    });
-
-    // Add navigation controls
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    map.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-
-    // Add fullscreen control
-    map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
-
-    map.current.on('load', () => {
-      setMapLoaded(true);
-      addDepartmentMarkers();
-    });
-
-    return () => {
-      markersRef.current.forEach(marker => marker.remove());
-      popupRef.current?.remove();
-      map.current?.remove();
-    };
-  }, []);
-
   // Add markers for departments
-  const addDepartmentMarkers = () => {
+  const addDepartmentMarkers = useCallback(() => {
     if (!map.current) return;
 
     // Clear existing markers
@@ -242,10 +236,10 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
         markersRef.current.push(marker);
       });
     });
-  };
+  }, [onDepartmentSelect]);
 
   // Show popup on hover
-  const showPopup = (
+  const showPopup = useCallback((
     dept: DepartmentDetail, 
     provinceName: string, 
     coords: { lng: number; lat: number }
@@ -294,7 +288,45 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
       .setLngLat([coords.lng, coords.lat])
       .setHTML(popupContent)
       .addTo(map.current);
-  };
+  }, []);
+
+  // Initialize map when token is available
+  useEffect(() => {
+    if (!mapContainer.current || !mapboxToken) return;
+
+    mapboxgl.accessToken = mapboxToken;
+
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [11.5, -0.8], // Center of Gabon
+      zoom: 5.5,
+      minZoom: 4,
+      maxZoom: 12,
+      maxBounds: [
+        [6, -5], // Southwest
+        [16, 4], // Northeast
+      ],
+    });
+
+    // Add navigation controls
+    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+
+    // Add fullscreen control
+    map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+
+    map.current.on('load', () => {
+      setMapLoaded(true);
+      addDepartmentMarkers();
+    });
+
+    return () => {
+      markersRef.current.forEach(marker => marker.remove());
+      popupRef.current?.remove();
+      map.current?.remove();
+    };
+  }, [mapboxToken, addDepartmentMarkers]);
 
   // Handle login navigation
   const handleAccessCouncil = (deptId: string) => {
@@ -316,14 +348,27 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
     return provincesData.find(p => p.departments.some(d => d.id === deptId));
   };
 
-  if (!MAPBOX_TOKEN) {
+  // Loading state
+  if (tokenLoading) {
     return (
-      <Card className="p-8 text-center">
-        <CardContent>
-          <MapPin className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Clé API Mapbox requise</h3>
-          <p className="text-muted-foreground text-sm">
-            Configurez VITE_MAPBOX_API_KEY pour afficher la carte interactive.
+      <Card className="p-8">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+          <p className="text-muted-foreground">Chargement de la carte...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Error state
+  if (tokenError || !mapboxToken) {
+    return (
+      <Card className="p-8">
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Carte non disponible</h3>
+          <p className="text-muted-foreground text-sm text-center max-w-md">
+            {tokenError || 'La clé API Mapbox n\'est pas configurée. Veuillez configurer MAPBOX_API_KEY dans les secrets.'}
           </p>
         </CardContent>
       </Card>
@@ -402,11 +447,11 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
         />
         
         {/* Map loading overlay */}
-        {!mapLoaded && (
+        {!mapLoaded && mapboxToken && (
           <div className="absolute inset-0 bg-muted rounded-xl flex items-center justify-center">
             <div className="text-center">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3"></div>
-              <span className="text-muted-foreground">Chargement de la carte...</span>
+              <span className="text-muted-foreground">Initialisation de la carte...</span>
             </div>
           </div>
         )}
