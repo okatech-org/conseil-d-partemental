@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-const InteractiveGabonMap = lazy(() => import("@/components/maps/InteractiveGabonMap"));
+const GabonDepartmentsMap = lazy(() => import("@/components/maps/GabonDepartmentsMap"));
 
 const stats = [
   { label: "Conseillers départementaux", value: "42", icon: Users, color: "text-blue-500" },
@@ -310,7 +310,7 @@ export const HomePage = () => {
             <span className="text-muted-foreground">Chargement de la carte...</span>
           </div>
         }>
-          <InteractiveGabonMap height="400px" />
+          <GabonDepartmentsMap showLoginButtons={false} />
         </Suspense>
       </div>
 
