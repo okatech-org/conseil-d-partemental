@@ -2,17 +2,25 @@ import { motion } from "framer-motion";
 import { 
   Users, CalendarDays, FileText, Vote, ArrowRight, 
   Clock, Building2, ExternalLink, ChevronRight,
-  Heart, GraduationCap, Car, Leaf, Map
+  Heart, GraduationCap, Car, Leaf, Map, Sparkles,
+  CheckCircle2, TrendingUp, Shield
 } from "lucide-react";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import woleuPioneerImage from "@/assets/landing/woleu-pioneer-building.jpg";
 
 const MapboxGabonMap = lazy(() => import("@/components/maps/MapboxGabonMap"));
+
+const woleuAchievements = [
+  { icon: CheckCircle2, text: "Budget transparent en temps réel" },
+  { icon: TrendingUp, text: "12 projets suivis numériquement" },
+  { icon: Shield, text: "Délibérations digitalisées" },
+];
 
 const stats = [
   { label: "Conseillers départementaux", value: "42", icon: Users, color: "text-blue-500" },
@@ -193,6 +201,96 @@ export const HomePage = () => {
             </motion.div>
           ))}
         </div>
+      </div>
+
+      {/* Woleu Pioneer Section */}
+      <div className="container mx-auto px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-br from-emerald-50 to-amber-50 dark:from-emerald-950/30 dark:to-amber-950/30">
+            <div className="grid lg:grid-cols-2 gap-0">
+              {/* Content */}
+              <div className="p-8 lg:p-12 flex flex-col justify-center">
+                <div className="flex items-center gap-2 mb-4">
+                  <Badge className="bg-emerald-600 text-white hover:bg-emerald-700">
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    Pionnier 2025
+                  </Badge>
+                </div>
+                
+                <h2 className="text-3xl lg:text-4xl font-bold font-serif text-foreground mb-4">
+                  Conseil Départemental du Woleu
+                </h2>
+                
+                <p className="text-lg text-muted-foreground mb-6">
+                  Premier conseil départemental du Gabon à adopter la digitalisation complète 
+                  de sa gouvernance. Une initiative pionnière pour la transparence et l'efficacité.
+                </p>
+                
+                <div className="space-y-3 mb-8">
+                  {woleuAchievements.map((achievement, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center gap-3"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
+                        <achievement.icon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <span className="text-foreground font-medium">{achievement.text}</span>
+                    </motion.div>
+                  ))}
+                </div>
+                
+                <div className="flex flex-wrap gap-4">
+                  <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                    <Link to="/conseil/woleu">
+                      Découvrir le Woleu
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="border-emerald-600/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30">
+                    <Link to="/conseil/woleu/transparent">
+                      Voir la transparence
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Image */}
+              <div className="relative h-64 lg:h-auto min-h-[300px]">
+                <img 
+                  src={woleuPioneerImage} 
+                  alt="Conseil Départemental du Woleu" 
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                
+                {/* Stats overlay */}
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex gap-4">
+                    <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg">
+                      <div className="text-2xl font-bold text-emerald-600">2.8 Mds</div>
+                      <div className="text-xs text-muted-foreground">Budget FCFA</div>
+                    </div>
+                    <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg">
+                      <div className="text-2xl font-bold text-amber-600">12</div>
+                      <div className="text-xs text-muted-foreground">Projets actifs</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
       </div>
 
       {/* Main Content Grid */}
