@@ -21,6 +21,10 @@ import { WoleuHomePage } from "./pages/conseil/WoleuHomePage";
 import { WoleuProgramPage } from "./pages/conseil/woleu/WoleuProgramPage";
 import { WoleuActualitesPage } from "./pages/conseil/woleu/WoleuActualitesPage";
 import { WoleuSensibilisationPage } from "./pages/conseil/woleu/WoleuSensibilisationPage";
+import { WoleuVisionPage } from "./pages/conseil/woleu/WoleuVisionPage";
+import { WoleuChantiersPage } from "./pages/conseil/woleu/WoleuChantiersPage";
+import { WoleuTransparentPage } from "./pages/conseil/woleu/WoleuTransparentPage";
+import { WoleuCerclesPage } from "./pages/conseil/woleu/WoleuCerclesPage";
 
 // Public pages
 import { HomePage } from "./pages/public/HomePage";
@@ -57,6 +61,10 @@ const App = () => (
               <Route path="/conseil/woleu/programme" element={<WoleuProgramPage />} />
               <Route path="/conseil/woleu/actualites" element={<WoleuActualitesPage />} />
               <Route path="/conseil/woleu/sensibilisation" element={<WoleuSensibilisationPage />} />
+              <Route path="/conseil/woleu/vision" element={<WoleuVisionPage />} />
+              <Route path="/conseil/woleu/chantiers" element={<WoleuChantiersPage />} />
+              <Route path="/conseil/woleu/transparent" element={<WoleuTransparentPage />} />
+              <Route path="/conseil/woleu/cercles" element={<WoleuCerclesPage />} />
               
               {/* Individual departmental council pages */}
               <Route path="/conseil/:departmentId" element={<ConseilHomePage />} />
