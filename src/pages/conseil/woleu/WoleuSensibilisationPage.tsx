@@ -12,6 +12,10 @@ import {
   Vote, Scale, Wallet, Eye
 } from 'lucide-react';
 import sensibilisationCampagneImg from '@/assets/woleu/sensibilisation-campagne.jpg';
+import campagneBudgetImg from '@/assets/woleu/campagne-budget.jpg';
+import campagneCerclesImg from '@/assets/woleu/campagne-cercles.jpg';
+import campagneTransparenceImg from '@/assets/woleu/campagne-transparence.jpg';
+import campagneConseilImg from '@/assets/woleu/campagne-conseil.jpg';
 
 const campaigns = [
   {
@@ -22,7 +26,8 @@ const campaigns = [
     progress: 75,
     participants: 1250,
     status: 'active',
-    color: 'bg-blue-500'
+    color: 'bg-blue-500',
+    image: campagneBudgetImg
   },
   {
     id: 2,
@@ -32,7 +37,8 @@ const campaigns = [
     progress: 60,
     participants: 890,
     status: 'active',
-    color: 'bg-green-500'
+    color: 'bg-green-500',
+    image: campagneCerclesImg
   },
   {
     id: 3,
@@ -42,7 +48,8 @@ const campaigns = [
     progress: 45,
     participants: 650,
     status: 'active',
-    color: 'bg-purple-500'
+    color: 'bg-purple-500',
+    image: campagneTransparenceImg
   },
   {
     id: 4,
@@ -52,7 +59,8 @@ const campaigns = [
     progress: 100,
     participants: 2100,
     status: 'completed',
-    color: 'bg-amber-500'
+    color: 'bg-amber-500',
+    image: campagneConseilImg
   }
 ];
 
@@ -204,18 +212,28 @@ export const WoleuSensibilisationPage: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-all group cursor-pointer">
-                    <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div className={`w-12 h-12 rounded-xl ${campaign.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                          <Icon className="h-6 w-6 text-white" />
-                        </div>
-                        <Badge variant={campaign.status === 'active' ? 'default' : 'secondary'}>
-                          {campaign.status === 'active' ? 'En cours' : 'Terminée'}
-                        </Badge>
+                  <Card className="h-full hover:shadow-lg transition-all group cursor-pointer overflow-hidden">
+                    {/* Campaign Image */}
+                    <div className="relative h-40 overflow-hidden">
+                      <img 
+                        src={campaign.image} 
+                        alt={campaign.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className={`absolute bottom-3 left-3 w-10 h-10 rounded-lg ${campaign.color} flex items-center justify-center`}>
+                        <Icon className="h-5 w-5 text-white" />
                       </div>
-                      <CardTitle className="text-xl mt-4">{campaign.title}</CardTitle>
-                      <CardDescription className="text-base">
+                      <Badge 
+                        variant={campaign.status === 'active' ? 'default' : 'secondary'}
+                        className="absolute top-3 right-3"
+                      >
+                        {campaign.status === 'active' ? 'En cours' : 'Terminée'}
+                      </Badge>
+                    </div>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg">{campaign.title}</CardTitle>
+                      <CardDescription className="text-sm">
                         {campaign.description}
                       </CardDescription>
                     </CardHeader>
