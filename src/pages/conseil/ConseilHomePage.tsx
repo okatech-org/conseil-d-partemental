@@ -3,29 +3,25 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Building2, MapPin, Users, Phone, Mail, Globe, 
-  Calendar, Shield, TrendingUp, Wallet, LogIn,
-  Eye, FileText, Award, ChevronRight, ArrowLeft,
-  Clock, CheckCircle2, AlertCircle, Newspaper,
-  GraduationCap, PlayCircle, ListChecks, BookOpen, 
-  Bell, Video, ExternalLink, Home
+  Shield, TrendingUp, Wallet, LogIn,
+  FileText, Award, ChevronRight, ArrowLeft,
+  Clock, AlertCircle, Newspaper,
+  PlayCircle, ListChecks, BookOpen, 
+  Bell, Video, Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  provincesData, 
   getDepartmentById, 
   getProvinceByDepartmentId,
-  profileTypes,
   fundsInfo,
   type DepartmentDetail,
   type ProvinceDetail
 } from '@/lib/departments-data';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { DemoAccessProfiles } from '@/components/demo/DemoAccessProfiles';
 
 // Mock data for news
 const mockActualites = [
@@ -57,12 +53,6 @@ export const ConseilHomePage: React.FC = () => {
   const [province, setProvince] = useState<ProvinceDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('accueil');
-  
-  // Login state
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const [isConnecting, setIsConnecting] = useState(false);
 
   useEffect(() => {
     if (departmentId) {
@@ -73,28 +63,6 @@ export const ConseilHomePage: React.FC = () => {
       setIsLoading(false);
     }
   }, [departmentId]);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginError('');
-    setIsConnecting(true);
-    
-    // Simulate login
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // For demo, accept any email/password with the department domain
-    if (loginEmail.includes(`@${departmentId}.conseil.ga`)) {
-      navigate(`/dashboard?tenant=${departmentId}`);
-    } else {
-      setLoginError('Identifiants incorrects. Utilisez un email @' + departmentId + '.conseil.ga');
-      setIsConnecting(false);
-    }
-  };
-
-  const handleDemoAccess = (roleId: string) => {
-    setLoginEmail(`${roleId}@${departmentId}.conseil.ga`);
-    setLoginPassword('demo2026');
-  };
 
   if (isLoading) {
     return (
@@ -425,7 +393,7 @@ export const ConseilHomePage: React.FC = () => {
               <Card className="border-primary/50 bg-primary/5">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <GraduationCap className="h-5 w-5" />
+                    <BookOpen className="h-5 w-5" />
                     Éducation civique
                   </CardTitle>
                 </CardHeader>
@@ -455,7 +423,7 @@ export const ConseilHomePage: React.FC = () => {
               <Card className="border-yellow-500/50 bg-yellow-500/5">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <Eye className="h-5 w-5" />
+                    <Globe className="h-5 w-5" />
                     Transparence
                   </CardTitle>
                 </CardHeader>
@@ -588,118 +556,11 @@ export const ConseilHomePage: React.FC = () => {
             >
               <PlayCircle className="h-12 w-12 mx-auto mb-4 text-primary" />
               <h2 className="text-2xl font-bold mb-2">Démonstration du portail</h2>
-              <p className="text-muted-foreground">Testez le système de gestion du conseil départemental</p>
+              <p className="text-muted-foreground">Testez le système de gestion du conseil départemental de {department.name}</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Login form */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <LogIn className="h-5 w-5" />
-                    Connexion au portail
-                  </CardTitle>
-                  <CardDescription>
-                    Accédez à votre espace personnel
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Adresse email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder={`utilisateur@${departmentId}.conseil.ga`}
-                        value={loginEmail}
-                        onChange={(e) => setLoginEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Mot de passe</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    
-                    {loginError && (
-                      <Alert variant="destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>{loginError}</AlertDescription>
-                      </Alert>
-                    )}
-
-                    <Button type="submit" className="w-full" disabled={isConnecting}>
-                      {isConnecting ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                          Connexion en cours...
-                        </>
-                      ) : (
-                        <>
-                          <LogIn className="h-4 w-4 mr-2" />
-                          Se connecter
-                        </>
-                      )}
-                    </Button>
-
-                    <p className="text-xs text-center text-muted-foreground">
-                      En vous connectant, vous acceptez les conditions d'utilisation
-                    </p>
-                  </form>
-                </CardContent>
-              </Card>
-
-              {/* Demo accounts */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Eye className="h-5 w-5" />
-                    Comptes de démonstration
-                  </CardTitle>
-                  <CardDescription>
-                    Cliquez sur un profil pour pré-remplir les identifiants
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {profileTypes.slice(0, 4).map((profile) => (
-                    <div key={profile.id} className="space-y-2">
-                      <h4 className="text-sm font-medium flex items-center gap-2">
-                        <div className={`w-4 h-4 rounded ${profile.color}`} />
-                        {profile.name}
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {'roles' in profile && profile.roles?.slice(0, 2).map(role => (
-                          <Button
-                            key={role.id}
-                            variant="outline"
-                            size="sm"
-                            className="text-xs justify-start"
-                            onClick={() => handleDemoAccess(role.id)}
-                          >
-                            <ChevronRight className="h-3 w-3 mr-1" />
-                            {role.label}
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-
-                  <Alert className="mt-4">
-                    <Clock className="h-4 w-4" />
-                    <AlertDescription className="text-xs">
-                      Mot de passe démo: <code className="bg-muted px-1 rounded">demo2026</code>
-                    </AlertDescription>
-                  </Alert>
-                </CardContent>
-              </Card>
-            </div>
+            {/* Full Demo Access Profiles Component */}
+            <DemoAccessProfiles departmentId={departmentId} showModules={true} />
           </TabsContent>
         </Tabs>
       </main>
