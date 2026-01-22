@@ -17,6 +17,7 @@ import { CitoyenPage } from "./pages/citoyen/CitoyenPage";
 import { DemoConseillPage } from "./pages/demo/DemoConseillPage";
 import { DemoMapPage } from "./pages/demo/DemoMapPage";
 import { ConseilHomePage } from "./pages/conseil/ConseilHomePage";
+import { WoleuHomePage } from "./pages/conseil/WoleuHomePage";
 
 // Public pages
 import { HomePage } from "./pages/public/HomePage";
@@ -47,6 +48,9 @@ const App = () => (
               
               {/* Map of 42 departmental councils */}
               <Route path="/conseils" element={<DemoMapPage />} />
+              
+              {/* Special page for Woleu */}
+              <Route path="/conseil/woleu" element={<WoleuHomePage />} />
               
               {/* Individual departmental council pages */}
               <Route path="/conseil/:departmentId" element={<ConseilHomePage />} />
