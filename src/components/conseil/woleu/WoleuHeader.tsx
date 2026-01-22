@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Building2, Menu, Sun, Moon, LogIn, UserPlus, Map, Home, 
-  FileText, Newspaper, Megaphone, Eye, Users, Sprout, ChevronDown 
+  FileText, Newspaper, Megaphone, Eye, Users, Sprout, ChevronDown, Compass 
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ interface WoleuHeaderProps {
 
 const mainNavItems = [
   { label: "Accueil", href: "/conseil/woleu", icon: Home },
+  { label: "Découvrir", href: "/conseil/woleu/decouvrir", icon: Compass },
   { label: "Actualités", href: "/conseil/woleu/actualites", icon: Newspaper },
   { label: "Sensibilisation", href: "/conseil/woleu/sensibilisation", icon: Megaphone },
   { label: "Conseils", href: "/conseils", icon: Map }
