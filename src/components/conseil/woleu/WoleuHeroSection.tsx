@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import heroForestAerial from '@/assets/woleu/hero-forest-aerial.jpg';
 
 interface WoleuHeroSectionProps {
   onReadProgram: () => void;
@@ -14,10 +15,16 @@ export const WoleuHeroSection: React.FC<WoleuHeroSectionProps> = ({
 }) => {
   return (
     <section className="relative min-h-[80vh] flex items-center overflow-hidden">
-      {/* Background with gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-800 via-green-700 to-green-600">
+      {/* Background image with gradient overlay */}
+      <div className="absolute inset-0">
+        <img 
+          src={heroForestAerial} 
+          alt="Forêt tropicale du Woleu-Ntem" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-green-900/90 via-green-800/85 to-green-700/80" />
         {/* Pattern overlay */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-5">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="hero-grid" width="60" height="60" patternUnits="userSpaceOnUse">

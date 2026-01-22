@@ -11,6 +11,7 @@ import {
   PlayCircle, FileText, Download, Share2, Heart, Lightbulb,
   Vote, Scale, Wallet, Eye
 } from 'lucide-react';
+import sensibilisationCampagneImg from '@/assets/woleu/sensibilisation-campagne.jpg';
 
 const campaigns = [
   {
@@ -112,7 +113,15 @@ export const WoleuSensibilisationPage: React.FC = () => {
       <WoleuHeader onNavigate={() => {}} activeSection="sensibilisation" />
       
       {/* Hero */}
-      <section className="relative pt-24 pb-16 bg-gradient-to-br from-green-800 via-green-700 to-green-600 overflow-hidden">
+      <section className="relative pt-24 pb-16 overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={sensibilisationCampagneImg} 
+            alt="Campagne de sensibilisation" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-green-900/95 via-green-800/90 to-green-700/85" />
+        </div>
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
