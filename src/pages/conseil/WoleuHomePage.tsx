@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { WoleuHeader } from '@/components/conseil/woleu/WoleuHeader';
 import { WoleuHeroSection } from '@/components/conseil/woleu/WoleuHeroSection';
 import { WoleuVisionSection } from '@/components/conseil/woleu/WoleuVisionSection';
-import { WoleuGallery } from '@/components/conseil/woleu/WoleuGallery';
 import { WoleuPriorityAxes } from '@/components/conseil/woleu/WoleuPriorityAxes';
 import { WoleuTransparentSection } from '@/components/conseil/woleu/WoleuTransparentSection';
 import { WoleuProjectsCarousel } from '@/components/conseil/woleu/WoleuProjectsCarousel';
@@ -12,7 +11,6 @@ import { WoleuFooter } from '@/components/conseil/woleu/WoleuFooter';
 export const WoleuHomePage: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const visionRef = useRef<HTMLDivElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
   const axesRef = useRef<HTMLDivElement>(null);
   const transparentRef = useRef<HTMLDivElement>(null);
   const cerclesRef = useRef<HTMLDivElement>(null);
@@ -26,7 +24,6 @@ export const WoleuHomePage: React.FC = () => {
     const refs: Record<string, React.RefObject<HTMLDivElement>> = {
       hero: heroRef,
       vision: visionRef,
-      gallery: galleryRef,
       axes: axesRef,
       transparent: transparentRef,
       cercles: cerclesRef,
@@ -60,10 +57,6 @@ export const WoleuHomePage: React.FC = () => {
       
       <div ref={visionRef} id="vision">
         <WoleuVisionSection />
-      </div>
-
-      <div ref={galleryRef} id="gallery">
-        <WoleuGallery />
       </div>
       
       <div ref={axesRef} id="axes">
