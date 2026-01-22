@@ -179,11 +179,25 @@ export const ConseilHomePage: React.FC = () => {
               <Badge variant={department.status === 'operational' ? 'default' : 'secondary'}>
                 {department.status === 'operational' ? '✓ Opérationnel' : '⟳ Transition'}
               </Badge>
-              <Button variant="ghost" size="sm">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => {
+                  setActiveTab('demo');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              >
                 <LogIn className="mr-2 h-4 w-4" />
                 Connexion
               </Button>
-              <Button size="sm" className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
+              <Button 
+                size="sm" 
+                className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                onClick={() => {
+                  setActiveTab('demo');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              >
                 <UserPlus className="mr-2 h-4 w-4" />
                 Inscription
               </Button>
@@ -211,6 +225,7 @@ export const ConseilHomePage: React.FC = () => {
                   <nav className="flex-1 space-y-1">
                     {navItems.map((item) => {
                       const Icon = item.icon;
+                      const isActive = !item.href && activeTab === item.value;
                       return item.href ? (
                         <Link
                           key={item.label}
@@ -228,12 +243,13 @@ export const ConseilHomePage: React.FC = () => {
                             setActiveTab(item.value!);
                             setMobileOpen(false);
                           }}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                            activeTab === item.value 
-                              ? "bg-primary text-primary-foreground" 
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            isActive 
+                              ? "bg-primary text-primary-foreground font-medium shadow-sm" 
                               : "text-foreground hover:bg-muted"
                           }`}
                         >
+                          {isActive && <div className="w-1 h-5 bg-primary-foreground rounded-full mr-1" />}
                           <Icon className="h-5 w-5" />
                           {item.label}
                         </button>
@@ -264,11 +280,26 @@ export const ConseilHomePage: React.FC = () => {
                         )}
                       </Button>
                     )}
-                    <Button variant="outline" className="w-full" onClick={() => setMobileOpen(false)}>
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      onClick={() => {
+                        setActiveTab('demo');
+                        setMobileOpen(false);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
                       <LogIn className="mr-2 h-4 w-4" />
                       Connexion
                     </Button>
-                    <Button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" onClick={() => setMobileOpen(false)}>
+                    <Button 
+                      className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" 
+                      onClick={() => {
+                        setActiveTab('demo');
+                        setMobileOpen(false);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
                       <UserPlus className="mr-2 h-4 w-4" />
                       Inscription
                     </Button>
