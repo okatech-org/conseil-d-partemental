@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -16,6 +16,15 @@ import cerclesCitoyenImg from '@/assets/woleu/cercle-citoyen.jpg';
 import landscapeForestImg from '@/assets/woleu/landscape-forest.jpg';
 import chantierInfrastructureImg from '@/assets/woleu/chantier-infrastructure.jpg';
 import chantierSanteImg from '@/assets/woleu/chantier-sante.jpg';
+// New images
+import galleryRiverImg from '@/assets/woleu/gallery-river-aerial.jpg';
+import galleryTraditionalHouseImg from '@/assets/woleu/gallery-traditional-house.jpg';
+import galleryHarvestImg from '@/assets/woleu/gallery-harvest.jpg';
+import galleryNewRoadImg from '@/assets/woleu/gallery-new-road.jpg';
+import galleryChildrenImg from '@/assets/woleu/gallery-children-playing.jpg';
+import galleryClinicImg from '@/assets/woleu/gallery-clinic-interior.jpg';
+import galleryWaterfallPoolImg from '@/assets/woleu/gallery-waterfall-pool.jpg';
+import galleryMarketWomenImg from '@/assets/woleu/gallery-market-women.jpg';
 
 interface GalleryImage {
   src: string;
@@ -25,20 +34,92 @@ interface GalleryImage {
 
 const galleryImages: GalleryImage[] = [
   { src: heroForestImg, alt: "Vue aérienne de la forêt du Woleu", category: "Paysages" },
-  { src: communityMeetingImg, alt: "Réunion communautaire", category: "Participation" },
-  { src: transparentMeetingImg, alt: "Session de transparence budgétaire", category: "Gouvernance" },
-  { src: infrastructureRoadImg, alt: "Travaux routiers", category: "Infrastructure" },
-  { src: healthCenterImg, alt: "Centre de santé", category: "Santé" },
-  { src: schoolBuildingImg, alt: "Établissement scolaire", category: "Éducation" },
-  { src: solarEnergyImg, alt: "Installation solaire", category: "Énergie" },
-  { src: pontConstructionImg, alt: "Construction de pont", category: "Infrastructure" },
-  { src: cerclesCitoyenImg, alt: "Cercle citoyen en action", category: "Participation" },
+  { src: galleryRiverImg, alt: "Rivière serpentant dans la forêt", category: "Paysages" },
+  { src: communityMeetingImg, alt: "Réunion communautaire", category: "Vie quotidienne" },
+  { src: galleryMarketWomenImg, alt: "Femmes au marché local", category: "Vie quotidienne" },
+  { src: transparentMeetingImg, alt: "Session de transparence budgétaire", category: "Vie quotidienne" },
+  { src: infrastructureRoadImg, alt: "Travaux routiers", category: "Infrastructures" },
+  { src: galleryNewRoadImg, alt: "Nouvelle route nationale", category: "Infrastructures" },
+  { src: healthCenterImg, alt: "Centre de santé", category: "Infrastructures" },
+  { src: galleryClinicImg, alt: "Intérieur de clinique moderne", category: "Infrastructures" },
+  { src: schoolBuildingImg, alt: "Établissement scolaire", category: "Infrastructures" },
+  { src: solarEnergyImg, alt: "Installation solaire", category: "Infrastructures" },
+  { src: pontConstructionImg, alt: "Construction de pont", category: "Infrastructures" },
+  { src: chantierInfrastructureImg, alt: "Chantier d'infrastructure", category: "Infrastructures" },
+  { src: cerclesCitoyenImg, alt: "Cercle citoyen en action", category: "Vie quotidienne" },
+  { src: galleryChildrenImg, alt: "Enfants jouant au football", category: "Vie quotidienne" },
   { src: landscapeForestImg, alt: "Paysage forestier", category: "Paysages" },
-  { src: chantierInfrastructureImg, alt: "Chantier d'infrastructure", category: "Infrastructure" },
-  { src: chantierSanteImg, alt: "Projet de santé", category: "Santé" },
+  { src: galleryWaterfallPoolImg, alt: "Cascade tropicale", category: "Paysages" },
+  { src: galleryTraditionalHouseImg, alt: "Maison traditionnelle", category: "Vie quotidienne" },
+  { src: chantierSanteImg, alt: "Projet de santé", category: "Infrastructures" },
+  { src: galleryHarvestImg, alt: "Récolte agricole", category: "Vie quotidienne" },
 ];
 
-const categories = ["Tous", "Paysages", "Participation", "Gouvernance", "Infrastructure", "Santé", "Éducation", "Énergie"];
+const categories = ["Tous", "Paysages", "Infrastructures", "Vie quotidienne"];
+
+// Parallax image component
+const ParallaxImage: React.FC<{
+  image: GalleryImage;
+  index: number;
+  pattern: { col: number; row: number };
+  onClick: () => void;
+}> = ({ image, index, pattern, onClick }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  
+  // Subtle parallax effect based on position
+  const y = useTransform(scrollYProgress, [0, 1], [20, -20]);
+
+  return (
+    <motion.div
+      ref={ref}
+      layout
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.25, delay: index * 0.02 }}
+      className="relative group cursor-pointer overflow-hidden rounded-md"
+      style={{
+        gridColumn: `span ${pattern.col}`,
+        gridRow: `span ${pattern.row}`,
+      }}
+      onClick={onClick}
+    >
+      <motion.div 
+        className="absolute inset-0"
+        style={{ y }}
+      >
+        <img
+          src={image.src}
+          alt={image.alt}
+          className="w-[calc(100%+40px)] h-[calc(100%+40px)] -mt-5 -ml-5 object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </motion.div>
+      
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10" />
+      
+      {/* Zoom icon */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+        <div className="w-10 h-10 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center">
+          <ZoomIn className="w-5 h-5 text-white" />
+        </div>
+      </div>
+      
+      {/* Category badge - only on larger cells */}
+      {(pattern.col >= 2 || pattern.row >= 2) && (
+        <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+          <span className="inline-block px-2 py-0.5 bg-green-600/90 text-white text-[10px] font-medium rounded-full">
+            {image.category}
+          </span>
+        </div>
+      )}
+    </motion.div>
+  );
+};
 
 export const WoleuPhotoGallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
@@ -47,6 +128,34 @@ export const WoleuPhotoGallery: React.FC = () => {
   const filteredImages = activeCategory === "Tous" 
     ? galleryImages 
     : galleryImages.filter(img => img.category === activeCategory);
+
+  // Create a perfect grid pattern based on number of images
+  const getSpanPattern = (index: number, total: number) => {
+    // Pattern optimized for a compact, filled grid
+    const patterns = [
+      { col: 2, row: 2 }, // 0 - Large feature
+      { col: 1, row: 1 }, // 1
+      { col: 1, row: 1 }, // 2
+      { col: 1, row: 2 }, // 3 - Tall
+      { col: 1, row: 1 }, // 4
+      { col: 2, row: 1 }, // 5 - Wide
+      { col: 1, row: 1 }, // 6
+      { col: 1, row: 1 }, // 7
+      { col: 2, row: 2 }, // 8 - Large feature
+      { col: 1, row: 1 }, // 9
+      { col: 1, row: 2 }, // 10 - Tall
+      { col: 1, row: 1 }, // 11
+      { col: 2, row: 1 }, // 12 - Wide
+      { col: 1, row: 1 }, // 13
+      { col: 1, row: 1 }, // 14
+      { col: 2, row: 2 }, // 15 - Large feature
+      { col: 1, row: 1 }, // 16
+      { col: 1, row: 1 }, // 17
+      { col: 2, row: 1 }, // 18 - Wide
+      { col: 1, row: 1 }, // 19
+    ];
+    return patterns[index % patterns.length];
+  };
 
   const openLightbox = (index: number) => {
     setSelectedImage(index);
@@ -71,7 +180,7 @@ export const WoleuPhotoGallery: React.FC = () => {
   };
 
   // Handle keyboard navigation
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedImage === null) return;
       
@@ -95,7 +204,7 @@ export const WoleuPhotoGallery: React.FC = () => {
   return (
     <>
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 justify-center mb-10">
+      <div className="flex flex-wrap gap-2 justify-center mb-8">
         {categories.map((category) => (
           <Button
             key={category}
@@ -103,8 +212,8 @@ export const WoleuPhotoGallery: React.FC = () => {
             size="sm"
             onClick={() => setActiveCategory(category)}
             className={activeCategory === category 
-              ? "bg-green-600 hover:bg-green-700" 
-              : "hover:bg-green-50 dark:hover:bg-green-900/20"
+              ? "bg-green-600 hover:bg-green-700 text-white" 
+              : "hover:bg-green-50 dark:hover:bg-green-900/20 border-green-200 dark:border-green-800"
             }
           >
             {category}
@@ -112,71 +221,21 @@ export const WoleuPhotoGallery: React.FC = () => {
         ))}
       </div>
 
-      {/* Compact Gallery Grid - Masonry-like layout */}
+      {/* Compact Gallery Grid with Parallax */}
       <motion.div 
         layout
-        className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 auto-rows-[80px] md:auto-rows-[100px] lg:auto-rows-[120px]"
+        className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 auto-rows-[70px] md:auto-rows-[90px] lg:auto-rows-[110px]"
       >
         <AnimatePresence mode="popLayout">
-          {filteredImages.map((image, index) => {
-            // Create varied spans for visual interest while keeping it compact
-            const spanPatterns = [
-              { col: 2, row: 2 }, // Large square
-              { col: 2, row: 1 }, // Wide
-              { col: 1, row: 2 }, // Tall
-              { col: 2, row: 2 }, // Large square
-              { col: 1, row: 1 }, // Small
-              { col: 2, row: 1 }, // Wide
-              { col: 1, row: 1 }, // Small
-              { col: 1, row: 2 }, // Tall
-              { col: 2, row: 1 }, // Wide
-              { col: 1, row: 1 }, // Small
-              { col: 2, row: 2 }, // Large square
-              { col: 1, row: 1 }, // Small
-            ];
-            const pattern = spanPatterns[index % spanPatterns.length];
-            
-            return (
-              <motion.div
-                key={image.src}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.2, delay: index * 0.03 }}
-                className="relative group cursor-pointer overflow-hidden rounded-md shadow-md"
-                style={{
-                  gridColumn: `span ${pattern.col}`,
-                  gridRow: `span ${pattern.row}`,
-                }}
-                onClick={() => openLightbox(index)}
-              >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-105"
-                />
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                
-                {/* Zoom icon */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <ZoomIn className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                
-                {/* Category badge - only on larger cells */}
-                {(pattern.col >= 2 || pattern.row >= 2) && (
-                  <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <span className="inline-block px-2 py-0.5 bg-green-600/90 text-white text-[10px] font-medium rounded-full">
-                      {image.category}
-                    </span>
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
+          {filteredImages.map((image, index) => (
+            <ParallaxImage
+              key={image.src}
+              image={image}
+              index={index}
+              pattern={getSpanPattern(index, filteredImages.length)}
+              onClick={() => openLightbox(index)}
+            />
+          ))}
         </AnimatePresence>
       </motion.div>
 
