@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Building2, MapPin, Info, Globe, ChevronRight, ChevronDown, ChevronUp,
-  Search, Filter, Users, Wallet, Shield
+  Search, Filter, Users, Wallet, Shield, X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,19 +10,60 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MapboxGabonMap from '@/components/maps/MapboxGabonMap';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { provincesData, getTotalDemoStats } from '@/lib/departments-data';
 
 export const DemoMapPage: React.FC = () => {
-  const navigate = useNavigate();
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [provinceFilter, setProvinceFilter] = useState<string>('all');
   const [expandedProvinces, setExpandedProvinces] = useState<Set<string>>(new Set());
   
   const stats = getTotalDemoStats();
+
+  // Filter provinces and departments based on search query and province filter
+  const filteredProvinces = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    
+    return provincesData
+      .filter(province => {
+        // Filter by province if selected
+        if (provinceFilter !== 'all' && province.id !== provinceFilter) {
+          return false;
+        }
+        
+        // If no search query, show all
+        if (!query) return true;
+        
+        // Check if province name matches
+        if (province.name.toLowerCase().includes(query)) return true;
+        
+        // Check if any department matches
+        return province.departments.some(dept => 
+          dept.name.toLowerCase().includes(query) ||
+          dept.chefLieu.toLowerCase().includes(query)
+        );
+      })
+      .map(province => {
+        // If search query, filter departments within province
+        if (query) {
+          const filteredDepts = province.departments.filter(dept =>
+            dept.name.toLowerCase().includes(query) ||
+            dept.chefLieu.toLowerCase().includes(query) ||
+            province.name.toLowerCase().includes(query)
+          );
+          return { ...province, departments: filteredDepts };
+        }
+        return province;
+      });
+  }, [searchQuery, provinceFilter]);
+
+  // Count total filtered departments
+  const filteredDepartmentsCount = useMemo(() => {
+    return filteredProvinces.reduce((acc, p) => acc + p.departments.length, 0);
+  }, [filteredProvinces]);
 
   const toggleProvinceExpanded = (provinceId: string) => {
     setExpandedProvinces(prev => {
@@ -43,6 +84,11 @@ export const DemoMapPage: React.FC = () => {
   const handleAccessCouncil = (deptId: string) => {
     // Open in new tab
     window.open(`/conseil/${deptId}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setProvinceFilter('all');
   };
 
   return (
@@ -122,11 +168,21 @@ export const DemoMapPage: React.FC = () => {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Rechercher un département..."
+                placeholder="Rechercher un département ou chef-lieu..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-9 pr-9"
               />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                  onClick={() => setSearchQuery('')}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
             </div>
             <Select value={provinceFilter} onValueChange={setProvinceFilter}>
               <SelectTrigger className="w-full sm:w-[200px]">
@@ -143,6 +199,24 @@ export const DemoMapPage: React.FC = () => {
               </SelectContent>
             </Select>
           </div>
+          
+          {/* Search results indicator */}
+          {(searchQuery || provinceFilter !== 'all') && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-3 flex items-center justify-between"
+            >
+              <p className="text-sm text-muted-foreground">
+                {filteredDepartmentsCount} département{filteredDepartmentsCount !== 1 ? 's' : ''} trouvé{filteredDepartmentsCount !== 1 ? 's' : ''}
+                {searchQuery && <span> pour "<strong>{searchQuery}</strong>"</span>}
+              </p>
+              <Button variant="ghost" size="sm" onClick={clearSearch}>
+                <X className="h-4 w-4 mr-1" />
+                Effacer les filtres
+              </Button>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -165,90 +239,164 @@ export const DemoMapPage: React.FC = () => {
 
         {/* Province overview */}
         <section className="mt-12">
-          <h3 className="text-2xl font-bold mb-6">Toutes les provinces</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {provincesData.map((province, index) => (
-              <motion.div
-                key={province.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between">
-                      <div className={`w-12 h-12 rounded-xl ${province.color} flex items-center justify-center`}>
-                        <MapPin className="h-6 w-6 text-white" />
-                      </div>
-                      <Badge variant="outline">{province.departments.length} dép.</Badge>
-                    </div>
-                    <CardTitle className="mt-3">{province.name}</CardTitle>
-                    <CardDescription>Capitale: {province.capital}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
-                      <div className="p-2 bg-muted rounded">
-                        <Users className="h-4 w-4 mx-auto mb-1" />
-                        <div className="font-medium">{(province.populationEstimate / 1000).toFixed(0)}k</div>
-                        <div className="text-muted-foreground">habitants</div>
-                      </div>
-                      <div className="p-2 bg-muted rounded">
-                        <Wallet className="h-4 w-4 mx-auto mb-1" />
-                        <div className="font-medium">{province.totalAgents}</div>
-                        <div className="text-muted-foreground">agents</div>
-                      </div>
-                      <div className="p-2 bg-muted rounded">
-                        <Shield className="h-4 w-4 mx-auto mb-1" />
-                        <div className="font-medium">{province.departments.filter(d => d.status === 'operational').length}</div>
-                        <div className="text-muted-foreground">opér.</div>
-                      </div>
-                    </div>
+          <h3 className="text-2xl font-bold mb-6">
+            {searchQuery || provinceFilter !== 'all' 
+              ? `Résultats (${filteredProvinces.length} province${filteredProvinces.length !== 1 ? 's' : ''})`
+              : 'Toutes les provinces'
+            }
+          </h3>
+          
+          {filteredProvinces.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-12"
+            >
+              <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h4 className="text-lg font-medium mb-2">Aucun résultat</h4>
+              <p className="text-muted-foreground mb-4">
+                Aucun département ne correspond à votre recherche.
+              </p>
+              <Button variant="outline" onClick={clearSearch}>
+                Effacer la recherche
+              </Button>
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <AnimatePresence mode="popLayout">
+                {filteredProvinces.map((province, index) => (
+                  <motion.div
+                    key={province.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+                      <CardHeader className="pb-2">
+                        <div className="flex items-start justify-between">
+                          <div className={`w-12 h-12 rounded-xl ${province.color} flex items-center justify-center`}>
+                            <MapPin className="h-6 w-6 text-white" />
+                          </div>
+                          <Badge variant="outline">{province.departments.length} dép.</Badge>
+                        </div>
+                        <CardTitle className="mt-3">{province.name}</CardTitle>
+                        <CardDescription>Capitale: {province.capital}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
+                          <div className="p-2 bg-muted rounded">
+                            <Users className="h-4 w-4 mx-auto mb-1" />
+                            <div className="font-medium">{(province.populationEstimate / 1000).toFixed(0)}k</div>
+                            <div className="text-muted-foreground">habitants</div>
+                          </div>
+                          <div className="p-2 bg-muted rounded">
+                            <Wallet className="h-4 w-4 mx-auto mb-1" />
+                            <div className="font-medium">{province.totalAgents}</div>
+                            <div className="text-muted-foreground">agents</div>
+                          </div>
+                          <div className="p-2 bg-muted rounded">
+                            <Shield className="h-4 w-4 mx-auto mb-1" />
+                            <div className="font-medium">{province.departments.filter(d => d.status === 'operational').length}</div>
+                            <div className="text-muted-foreground">opér.</div>
+                          </div>
+                        </div>
 
-                    <div className="space-y-2">
-                      {(expandedProvinces.has(province.id) 
-                        ? province.departments 
-                        : province.departments.slice(0, 3)
-                      ).map(dept => (
-                        <Button
-                          key={dept.id}
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-between"
-                          onClick={() => handleAccessCouncil(dept.id)}
-                        >
-                          <span className="flex items-center gap-2">
-                            {dept.isProvinceCapital && <span className="text-xs">⭐</span>}
-                            {dept.name}
-                          </span>
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      ))}
-                      {province.departments.length > 3 && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full gap-2"
-                          onClick={() => toggleProvinceExpanded(province.id)}
-                        >
-                          {expandedProvinces.has(province.id) ? (
-                            <>
-                              <ChevronUp className="h-4 w-4" />
-                              Réduire
-                            </>
-                          ) : (
-                            <>
-                              <ChevronDown className="h-4 w-4" />
-                              Voir les {province.departments.length - 3} autres
-                            </>
+                        <div className="space-y-1">
+                          {/* Always visible departments */}
+                          {province.departments.slice(0, 3).map((dept, deptIndex) => (
+                            <motion.div
+                              key={dept.id}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: deptIndex * 0.05 }}
+                            >
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="w-full justify-between hover:bg-primary/10"
+                                onClick={() => handleAccessCouncil(dept.id)}
+                              >
+                                <span className="flex items-center gap-2">
+                                  {dept.isProvinceCapital && <span className="text-xs">⭐</span>}
+                                  <span className={searchQuery && dept.name.toLowerCase().includes(searchQuery.toLowerCase()) ? 'font-semibold text-primary' : ''}>
+                                    {dept.name}
+                                  </span>
+                                </span>
+                                <ChevronRight className="h-4 w-4" />
+                              </Button>
+                            </motion.div>
+                          ))}
+                          
+                          {/* Expandable departments with animation */}
+                          <AnimatePresence>
+                            {expandedProvinces.has(province.id) && province.departments.length > 3 && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                className="overflow-hidden"
+                              >
+                                {province.departments.slice(3).map((dept, deptIndex) => (
+                                  <motion.div
+                                    key={dept.id}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: deptIndex * 0.05 }}
+                                  >
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="w-full justify-between hover:bg-primary/10"
+                                      onClick={() => handleAccessCouncil(dept.id)}
+                                    >
+                                      <span className="flex items-center gap-2">
+                                        {dept.isProvinceCapital && <span className="text-xs">⭐</span>}
+                                        <span className={searchQuery && dept.name.toLowerCase().includes(searchQuery.toLowerCase()) ? 'font-semibold text-primary' : ''}>
+                                          {dept.name}
+                                        </span>
+                                      </span>
+                                      <ChevronRight className="h-4 w-4" />
+                                    </Button>
+                                  </motion.div>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                          
+                          {/* Expand/Collapse button */}
+                          {province.departments.length > 3 && (
+                            <motion.div layout>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full gap-2 mt-2"
+                                onClick={() => toggleProvinceExpanded(province.id)}
+                              >
+                                <motion.div
+                                  animate={{ rotate: expandedProvinces.has(province.id) ? 180 : 0 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <ChevronDown className="h-4 w-4" />
+                                </motion.div>
+                                {expandedProvinces.has(province.id) ? (
+                                  'Réduire'
+                                ) : (
+                                  `Voir les ${province.departments.length - 3} autres`
+                                )}
+                              </Button>
+                            </motion.div>
                           )}
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
         </section>
       </main>
 
