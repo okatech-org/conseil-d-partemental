@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Building2, MapPin, Users, Phone, Mail, Globe, 
   Shield, TrendingUp, Wallet, LogIn, UserPlus,
@@ -314,406 +314,437 @@ export const ConseilHomePage: React.FC = () => {
       {/* Main content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-
-          {/* Accueil Tab */}
-          <TabsContent value="accueil" className="space-y-6">
-            {/* Hero section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-8"
-            >
-              <div className={`w-20 h-20 rounded-2xl ${province.color} flex items-center justify-center mx-auto mb-4`}>
-                <Building2 className="h-10 w-10 text-white" />
-              </div>
-              <h2 className="text-3xl font-bold mb-2">
-                Conseil Départemental de {department.name}
-              </h2>
-              <p className="text-lg text-muted-foreground mb-4">
-                Province de {province.name} • Chef-lieu: {department.chefLieu}
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
-                {department.isProvinceCapital && (
-                  <Badge variant="secondary" className="gap-1">
-                    <Award className="h-3 w-3" /> Capitale provinciale
-                  </Badge>
-                )}
-                {department.specialZone && (
-                  <Badge variant="outline">
-                    {department.specialZone === 'mining' && '🔶 Zone Minière'}
-                    {department.specialZone === 'petroleum' && '🛢️ Zone Pétrolière'}
-                    {department.specialZone === 'coastal' && '🌊 Zone Côtière'}
-                    {department.specialZone === 'forest' && '🌲 Zone Forestière'}
-                  </Badge>
-                )}
-                {department.activeFunds.map(fund => (
-                  <Badge key={fund} variant="outline" className="text-xs">
-                    {fundsInfo[fund].name}
-                  </Badge>
-                ))}
-              </div>
-
-              <Button 
-                size="lg" 
-                className="gap-2"
-                onClick={() => setActiveTab('demo')}
+          <AnimatePresence mode="wait">
+            {activeTab === 'accueil' && (
+              <motion.div
+                key="accueil"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
               >
-                <LogIn className="h-5 w-5" />
-                Se connecter au portail
-              </Button>
-            </motion.div>
+                <TabsContent value="accueil" className="space-y-6 mt-0" forceMount>
+                  {/* Hero section */}
+                  <div className="text-center py-8">
+                    <div className={`w-20 h-20 rounded-2xl ${province.color} flex items-center justify-center mx-auto mb-4`}>
+                      <Building2 className="h-10 w-10 text-white" />
+                    </div>
+                    <h2 className="text-3xl font-bold mb-2">
+                      Conseil Départemental de {department.name}
+                    </h2>
+                    <p className="text-lg text-muted-foreground mb-4">
+                      Province de {province.name} • Chef-lieu: {department.chefLieu}
+                    </p>
+                    
+                    <div className="flex flex-wrap justify-center gap-2 mb-6">
+                      {department.isProvinceCapital && (
+                        <Badge variant="secondary" className="gap-1">
+                          <Award className="h-3 w-3" /> Capitale provinciale
+                        </Badge>
+                      )}
+                      {department.specialZone && (
+                        <Badge variant="outline">
+                          {department.specialZone === 'mining' && '🔶 Zone Minière'}
+                          {department.specialZone === 'petroleum' && '🛢️ Zone Pétrolière'}
+                          {department.specialZone === 'coastal' && '🌊 Zone Côtière'}
+                          {department.specialZone === 'forest' && '🌲 Zone Forestière'}
+                        </Badge>
+                      )}
+                      {department.activeFunds.map(fund => (
+                        <Badge key={fund} variant="outline" className="text-xs">
+                          {fundsInfo[fund].name}
+                        </Badge>
+                      ))}
+                    </div>
 
-            {/* Stats cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Users className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-bold">{department.population?.toLocaleString()}</div>
-                  <div className="text-xs text-muted-foreground">Habitants</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Shield className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-bold">{department.activeCompetences}/23</div>
-                  <div className="text-xs text-muted-foreground">Compétences</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Wallet className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-bold">{(department.budgetEstimate / 1000).toFixed(1)}B</div>
-                  <div className="text-xs text-muted-foreground">Budget FCFA</div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-bold">{department.transferredStaff + department.localRecruits}</div>
-                  <div className="text-xs text-muted-foreground">Agents</div>
-                </CardContent>
-              </Card>
-            </div>
+                    <Button 
+                      size="lg" 
+                      className="gap-2"
+                      onClick={() => setActiveTab('demo')}
+                    >
+                      <LogIn className="h-5 w-5" />
+                      Se connecter au portail
+                    </Button>
+                  </div>
 
-            {/* Quick access */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Accès rapide</CardTitle>
-                <CardDescription>Services publics et informations</CardDescription>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('actualites')}>
-                  <Newspaper className="h-6 w-6" />
-                  <span className="text-xs">Actualités</span>
-                </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('processus')}>
-                  <ListChecks className="h-6 w-6" />
-                  <span className="text-xs">Démarches</span>
-                </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('tutoriels')}>
-                  <Video className="h-6 w-6" />
-                  <span className="text-xs">Tutoriels</span>
-                </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col gap-2">
-                  <Phone className="h-6 w-6" />
-                  <span className="text-xs">Contact</span>
-                </Button>
-              </CardContent>
-            </Card>
+                  {/* Stats cards */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <Card>
+                      <CardContent className="p-4 text-center">
+                        <Users className="h-8 w-8 mx-auto mb-2 text-primary" />
+                        <div className="text-2xl font-bold">{department.population?.toLocaleString()}</div>
+                        <div className="text-xs text-muted-foreground">Habitants</div>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-4 text-center">
+                        <Shield className="h-8 w-8 mx-auto mb-2 text-primary" />
+                        <div className="text-2xl font-bold">{department.activeCompetences}/23</div>
+                        <div className="text-xs text-muted-foreground">Compétences</div>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-4 text-center">
+                        <Wallet className="h-8 w-8 mx-auto mb-2 text-primary" />
+                        <div className="text-2xl font-bold">{(department.budgetEstimate / 1000).toFixed(1)}B</div>
+                        <div className="text-xs text-muted-foreground">Budget FCFA</div>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardContent className="p-4 text-center">
+                        <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
+                        <div className="text-2xl font-bold">{department.transferredStaff + department.localRecruits}</div>
+                        <div className="text-xs text-muted-foreground">Agents</div>
+                      </CardContent>
+                    </Card>
+                  </div>
 
-            {/* Contact info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5" />
-                    Informations générales
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Département</span>
-                    <span className="font-medium">{department.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Code</span>
-                    <span className="font-mono">{department.code}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Chef-lieu</span>
-                    <span className="font-medium">{department.chefLieu}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Province</span>
-                    <span className="font-medium">{province.name}</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Phone className="h-5 w-5" />
-                    Contact
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">contact@{departmentId}.conseil.ga</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">+241 XX XX XX XX</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{departmentId}.conseil.ga</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">Hôtel du Département, {department.chefLieu}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Actualités Tab */}
-          <TabsContent value="actualites" className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-4"
-            >
-              <Newspaper className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-2xl font-bold mb-2">Actualités du Conseil</h2>
-              <p className="text-muted-foreground">Suivez les dernières nouvelles de votre département</p>
-            </motion.div>
-
-            <div className="grid gap-4">
-              {mockActualites.map((actu, index) => (
-                <motion.div
-                  key={actu.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="outline">{actu.category}</Badge>
-                            <span className="text-sm text-muted-foreground">{actu.date}</span>
-                          </div>
-                          <h3 className="font-semibold mb-1">{actu.title}</h3>
-                          <p className="text-sm text-muted-foreground">{actu.excerpt}</p>
-                        </div>
-                        <Button variant="ghost" size="icon">
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </div>
+                  {/* Quick access */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Accès rapide</CardTitle>
+                      <CardDescription>Services publics et informations</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('actualites')}>
+                        <Newspaper className="h-6 w-6" />
+                        <span className="text-xs">Actualités</span>
+                      </Button>
+                      <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('processus')}>
+                        <ListChecks className="h-6 w-6" />
+                        <span className="text-xs">Démarches</span>
+                      </Button>
+                      <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('tutoriels')}>
+                        <Video className="h-6 w-6" />
+                        <span className="text-xs">Tutoriels</span>
+                      </Button>
+                      <Button variant="outline" className="h-auto py-4 flex-col gap-2">
+                        <Phone className="h-6 w-6" />
+                        <span className="text-xs">Contact</span>
+                      </Button>
                     </CardContent>
                   </Card>
-                </motion.div>
-              ))}
-            </div>
 
-            <div className="text-center">
-              <Button variant="outline">
-                Voir toutes les actualités
-                <ChevronRight className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
-          </TabsContent>
-
-          {/* Sensibilisation Tab */}
-          <TabsContent value="sensibilisation" className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-4"
-            >
-              <Bell className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-2xl font-bold mb-2">Campagnes de Sensibilisation</h2>
-              <p className="text-muted-foreground">Informations importantes pour les citoyens</p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <Card className="border-primary/50 bg-primary/5">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <BookOpen className="h-5 w-5" />
-                    Éducation civique
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Comprendre le fonctionnement de votre conseil départemental et vos droits en tant que citoyen.
-                  </p>
-                  <Button variant="outline" size="sm">En savoir plus</Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border-green-500/50 bg-green-500/5">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Shield className="h-5 w-5" />
-                    Santé publique
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Campagnes de vaccination et informations sanitaires pour la population.
-                  </p>
-                  <Button variant="outline" size="sm">En savoir plus</Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border-yellow-500/50 bg-yellow-500/5">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Globe className="h-5 w-5" />
-                    Transparence
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Accédez aux délibérations, budgets et décisions du conseil en toute transparence.
-                  </p>
-                  <Button variant="outline" size="sm">Consulter</Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border-blue-500/50 bg-blue-500/5">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Users className="h-5 w-5" />
-                    Participation citoyenne
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Comment participer aux décisions locales et faire entendre votre voix.
-                  </p>
-                  <Button variant="outline" size="sm">Participer</Button>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Tutoriels Tab */}
-          <TabsContent value="tutoriels" className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-4"
-            >
-              <Video className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-2xl font-bold mb-2">Tutoriels vidéo</h2>
-              <p className="text-muted-foreground">Apprenez à utiliser les services numériques du département</p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              {mockTutoriels.map((tuto, index) => (
-                <motion.div
-                  key={tuto.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer group">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                          <tuto.icon className="h-8 w-8 text-primary" />
+                  {/* Contact info */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Building2 className="h-5 w-5" />
+                          Informations générales
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Département</span>
+                          <span className="font-medium">{department.name}</span>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold mb-1">{tuto.title}</h3>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Clock className="h-3 w-3" />
-                            <span>{tuto.duration}</span>
-                          </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Code</span>
+                          <span className="font-mono">{department.code}</span>
                         </div>
-                        <Button variant="ghost" size="icon">
-                          <PlayCircle className="h-6 w-6 text-primary" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </TabsContent>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Chef-lieu</span>
+                          <span className="font-medium">{department.chefLieu}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Province</span>
+                          <span className="font-medium">{province.name}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
 
-          {/* Processus Tab */}
-          <TabsContent value="processus" className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-4"
-            >
-              <ListChecks className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-2xl font-bold mb-2">Démarches administratives</h2>
-              <p className="text-muted-foreground">Toutes les procédures et leurs étapes</p>
-            </motion.div>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Phone className="h-5 w-5" />
+                          Contact
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Mail className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">contact@{departmentId}.conseil.ga</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Phone className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">+241 XX XX XX XX</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Globe className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">{departmentId}.conseil.ga</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">Hôtel du Département, {department.chefLieu}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+              </motion.div>
+            )}
 
-            <div className="grid gap-4">
-              {mockProcessus.map((proc, index) => (
-                <motion.div
-                  key={proc.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                            <FileText className="h-6 w-6 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold">{proc.title}</h3>
-                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                              <span className="flex items-center gap-1">
-                                <ListChecks className="h-3 w-3" /> {proc.steps} étapes
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" /> {proc.duration}
-                              </span>
+            {activeTab === 'actualites' && (
+              <motion.div
+                key="actualites"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                <TabsContent value="actualites" className="space-y-6 mt-0" forceMount>
+                  <div className="text-center py-4">
+                    <Newspaper className="h-12 w-12 mx-auto mb-4 text-primary" />
+                    <h2 className="text-2xl font-bold mb-2">Actualités du Conseil</h2>
+                    <p className="text-muted-foreground">Suivez les dernières nouvelles de votre département</p>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {mockActualites.map((actu, index) => (
+                      <motion.div
+                        key={actu.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Badge variant="outline">{actu.category}</Badge>
+                                  <span className="text-sm text-muted-foreground">{actu.date}</span>
+                                </div>
+                                <h3 className="font-semibold mb-1">{actu.title}</h3>
+                                <p className="text-sm text-muted-foreground">{actu.excerpt}</p>
+                              </div>
+                              <Button variant="ghost" size="icon">
+                                <ChevronRight className="h-4 w-4" />
+                              </Button>
                             </div>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          Commencer
-                          <ChevronRight className="h-4 w-4 ml-1" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </TabsContent>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
 
-          {/* Demo Tab (Connexion) */}
-          <TabsContent value="demo" className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-4"
-            >
-              <PlayCircle className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-2xl font-bold mb-2">Démonstration du portail</h2>
-              <p className="text-muted-foreground">Testez le système de gestion du conseil départemental de {department.name}</p>
-            </motion.div>
+                  <div className="text-center">
+                    <Button variant="outline">
+                      Voir toutes les actualités
+                      <ChevronRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </div>
+                </TabsContent>
+              </motion.div>
+            )}
 
-            {/* Full Demo Access Profiles Component */}
-            <DemoAccessProfiles departmentId={departmentId} showModules={true} />
-          </TabsContent>
+            {activeTab === 'sensibilisation' && (
+              <motion.div
+                key="sensibilisation"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                <TabsContent value="sensibilisation" className="space-y-6 mt-0" forceMount>
+                  <div className="text-center py-4">
+                    <Bell className="h-12 w-12 mx-auto mb-4 text-primary" />
+                    <h2 className="text-2xl font-bold mb-2">Campagnes de Sensibilisation</h2>
+                    <p className="text-muted-foreground">Informations importantes pour les citoyens</p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <Card className="border-primary/50 bg-primary/5">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <BookOpen className="h-5 w-5" />
+                          Éducation civique
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Comprendre le fonctionnement de votre conseil départemental et vos droits en tant que citoyen.
+                        </p>
+                        <Button variant="outline" size="sm">En savoir plus</Button>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-green-500/50 bg-green-500/5">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <Shield className="h-5 w-5" />
+                          Santé publique
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Campagnes de vaccination et informations sanitaires pour la population.
+                        </p>
+                        <Button variant="outline" size="sm">En savoir plus</Button>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-yellow-500/50 bg-yellow-500/5">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <Globe className="h-5 w-5" />
+                          Transparence
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Accédez aux délibérations, budgets et décisions du conseil en toute transparence.
+                        </p>
+                        <Button variant="outline" size="sm">Consulter</Button>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-blue-500/50 bg-blue-500/5">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <Users className="h-5 w-5" />
+                          Participation citoyenne
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Comment participer aux décisions locales et faire entendre votre voix.
+                        </p>
+                        <Button variant="outline" size="sm">Participer</Button>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+              </motion.div>
+            )}
+
+            {activeTab === 'tutoriels' && (
+              <motion.div
+                key="tutoriels"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                <TabsContent value="tutoriels" className="space-y-6 mt-0" forceMount>
+                  <div className="text-center py-4">
+                    <Video className="h-12 w-12 mx-auto mb-4 text-primary" />
+                    <h2 className="text-2xl font-bold mb-2">Tutoriels vidéo</h2>
+                    <p className="text-muted-foreground">Apprenez à utiliser les services numériques du département</p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {mockTutoriels.map((tuto, index) => (
+                      <motion.div
+                        key={tuto.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Card className="hover:shadow-md transition-shadow cursor-pointer group">
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-4">
+                              <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                <tuto.icon className="h-8 w-8 text-primary" />
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="font-semibold mb-1">{tuto.title}</h3>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Clock className="h-3 w-3" />
+                                  <span>{tuto.duration}</span>
+                                </div>
+                              </div>
+                              <Button variant="ghost" size="icon">
+                                <PlayCircle className="h-6 w-6 text-primary" />
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                </TabsContent>
+              </motion.div>
+            )}
+
+            {activeTab === 'processus' && (
+              <motion.div
+                key="processus"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                <TabsContent value="processus" className="space-y-6 mt-0" forceMount>
+                  <div className="text-center py-4">
+                    <ListChecks className="h-12 w-12 mx-auto mb-4 text-primary" />
+                    <h2 className="text-2xl font-bold mb-2">Démarches administratives</h2>
+                    <p className="text-muted-foreground">Toutes les procédures et leurs étapes</p>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {mockProcessus.map((proc, index) => (
+                      <motion.div
+                        key={proc.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Card className="hover:shadow-md transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                                  <FileText className="h-6 w-6 text-primary" />
+                                </div>
+                                <div>
+                                  <h3 className="font-semibold">{proc.title}</h3>
+                                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                    <span className="flex items-center gap-1">
+                                      <ListChecks className="h-3 w-3" /> {proc.steps} étapes
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="h-3 w-3" /> {proc.duration}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm">
+                                Commencer
+                                <ChevronRight className="h-4 w-4 ml-1" />
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                </TabsContent>
+              </motion.div>
+            )}
+
+            {activeTab === 'demo' && (
+              <motion.div
+                key="demo"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                <TabsContent value="demo" className="space-y-6 mt-0" forceMount>
+                  <div className="text-center py-4">
+                    <PlayCircle className="h-12 w-12 mx-auto mb-4 text-primary" />
+                    <h2 className="text-2xl font-bold mb-2">Démonstration du portail</h2>
+                    <p className="text-muted-foreground">Testez le système de gestion du conseil départemental de {department.name}</p>
+                  </div>
+
+                  {/* Full Demo Access Profiles Component */}
+                  <DemoAccessProfiles departmentId={departmentId} showModules={true} />
+                </TabsContent>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Tabs>
       </main>
 
