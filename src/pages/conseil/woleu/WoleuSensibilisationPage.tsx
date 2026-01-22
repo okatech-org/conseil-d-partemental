@@ -16,6 +16,9 @@ import campagneBudgetImg from '@/assets/woleu/campagne-budget.jpg';
 import campagneCerclesImg from '@/assets/woleu/campagne-cercles.jpg';
 import campagneTransparenceImg from '@/assets/woleu/campagne-transparence.jpg';
 import campagneConseilImg from '@/assets/woleu/campagne-conseil.jpg';
+import eventAtelierBudgetImg from '@/assets/woleu/event-atelier-budget.jpg';
+import eventPortesOuvertesImg from '@/assets/woleu/event-portes-ouvertes.jpg';
+import eventFormationOnlineImg from '@/assets/woleu/event-formation-online.jpg';
 
 const campaigns = [
   {
@@ -71,7 +74,8 @@ const upcomingEvents = [
     date: "2025-02-05",
     time: "10:00",
     location: "Mairie d'Oyem",
-    type: "atelier"
+    type: "atelier",
+    image: eventAtelierBudgetImg
   },
   {
     id: 2,
@@ -79,7 +83,8 @@ const upcomingEvents = [
     date: "2025-02-12",
     time: "09:00",
     location: "Hôtel du Département",
-    type: "evenement"
+    type: "evenement",
+    image: eventPortesOuvertesImg
   },
   {
     id: 3,
@@ -87,7 +92,8 @@ const upcomingEvents = [
     date: "2025-02-20",
     time: "14:00",
     location: "En ligne",
-    type: "formation"
+    type: "formation",
+    image: eventFormationOnlineImg
   }
 ];
 
@@ -293,32 +299,37 @@ export const WoleuSensibilisationPage: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="h-full hover:shadow-md transition-all cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="flex flex-col items-center justify-center w-16 h-16 rounded-xl bg-green-600 text-white flex-shrink-0">
-                        <span className="text-2xl font-bold">
-                          {new Date(event.date).getDate()}
-                        </span>
-                        <span className="text-xs uppercase">
-                          {new Date(event.date).toLocaleDateString('fr-FR', { month: 'short' })}
-                        </span>
+                <Card className="h-full hover:shadow-lg transition-all cursor-pointer overflow-hidden group">
+                  {/* Event Image */}
+                  <div className="relative h-32 overflow-hidden">
+                    <img 
+                      src={event.image} 
+                      alt={event.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute bottom-2 left-2 flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-green-600 text-white">
+                      <span className="text-lg font-bold leading-none">
+                        {new Date(event.date).getDate()}
+                      </span>
+                      <span className="text-[10px] uppercase">
+                        {new Date(event.date).toLocaleDateString('fr-FR', { month: 'short' })}
+                      </span>
+                    </div>
+                    <Badge variant="secondary" className="absolute top-2 right-2 text-xs">
+                      {event.type}
+                    </Badge>
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold mb-2 line-clamp-2">{event.title}</h3>
+                    <div className="text-sm text-muted-foreground space-y-1">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {event.time}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <Badge variant="outline" className="mb-2 text-xs">
-                          {event.type}
-                        </Badge>
-                        <h3 className="font-semibold mb-2">{event.title}</h3>
-                        <div className="text-sm text-muted-foreground space-y-1">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {event.time}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            {event.location}
-                          </div>
-                        </div>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3" />
+                        {event.location}
                       </div>
                     </div>
                   </CardContent>
