@@ -181,21 +181,25 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                 <Moon className={`absolute h-5 w-5 transition-all duration-300 ${resolvedTheme === 'dark' ? "rotate-90 scale-0" : "rotate-0 scale-100"}`} />
               </Button>
             )}
-            <Button 
-              variant={isScrolled ? "ghost" : "outline"} 
-              size="sm"
-              className={isScrolled ? '' : 'border-white/30 text-white hover:bg-white/10'}
-            >
-              <LogIn className="mr-2 h-4 w-4" />
-              Connexion
-            </Button>
-            <Button 
-              size="sm" 
-              className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold"
-            >
-              <UserPlus className="mr-2 h-4 w-4" />
-              Inscription
-            </Button>
+            <Link to="/conseil/woleu/connexion">
+              <Button 
+                variant={isScrolled ? "ghost" : "outline"} 
+                size="sm"
+                className={isScrolled ? '' : 'border-white/30 text-white hover:bg-white/10'}
+              >
+                <LogIn className="mr-2 h-4 w-4" />
+                Connexion
+              </Button>
+            </Link>
+            <Link to="/conseil/woleu/connexion">
+              <Button 
+                size="sm" 
+                className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold"
+              >
+                <UserPlus className="mr-2 h-4 w-4" />
+                Inscription
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu */}
@@ -307,14 +311,18 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                       )}
                     </Button>
                   )}
-                  <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Connexion
-                  </Button>
-                  <Button className="w-full bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Inscription
-                  </Button>
+                  <Link to="/conseil/woleu/connexion" onClick={() => setMobileOpen(false)}>
+                    <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Connexion
+                    </Button>
+                  </Link>
+                  <Link to="/conseil/woleu/connexion" onClick={() => setMobileOpen(false)}>
+                    <Button className="w-full bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold">
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Inscription
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </SheetContent>
