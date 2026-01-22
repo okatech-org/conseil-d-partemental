@@ -144,13 +144,13 @@ export const WoleuCitizenEngagement: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <Card className="bg-gradient-to-br from-amber-500/20 to-amber-600/10 border-amber-400/30 backdrop-blur-md">
+              <Card className="bg-gradient-to-br from-amber-500/30 to-amber-600/20 border-amber-400/40 backdrop-blur-md shadow-lg">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <Sparkles className="w-5 h-5 text-amber-400" />
                     <h3 className="font-semibold text-lg text-white">Rejoindre un Cercle</h3>
                   </div>
-                  <p className="text-white/70 text-sm mb-4">
+                  <p className="text-white/80 text-sm mb-4">
                     Inscrivez-vous pour recevoir les informations sur les prochaines réunions citoyennes.
                   </p>
                   <form onSubmit={handleSubmit} className="flex gap-3">
@@ -159,11 +159,11 @@ export const WoleuCitizenEngagement: React.FC = () => {
                       placeholder="Votre adresse email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50 focus-visible:ring-amber-400"
+                      className="flex-1 bg-white/15 border-white/30 text-white placeholder:text-white/60 focus-visible:ring-amber-400 focus-visible:border-amber-400"
                     />
                     <Button 
                       type="submit"
-                      className="bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold"
+                      className="bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold shadow-md"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -242,7 +242,7 @@ export const WoleuCitizenEngagement: React.FC = () => {
 
             <Button 
               variant="outline" 
-              className="w-full border-white/20 text-white hover:bg-white/10 mt-4"
+              className="w-full border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 backdrop-blur-sm mt-4"
             >
               Voir tous les cercles
               <ArrowRight className="ml-2 h-4 w-4" />
