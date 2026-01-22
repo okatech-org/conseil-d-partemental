@@ -146,7 +146,8 @@ const GabonDepartmentsMap: React.FC<GabonDepartmentsMapProps> = ({
   };
 
   const handleLoginClick = (deptId: string) => {
-    navigate(`/conseil/${deptId}`);
+    // Open in new tab
+    window.open(`/conseil/${deptId}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
