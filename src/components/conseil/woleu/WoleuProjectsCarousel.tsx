@@ -139,7 +139,7 @@ export const WoleuProjectsCarousel: React.FC = () => {
                         {project.description}
                       </CardDescription>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-green-600 dark:text-green-400">
+                        <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                           {project.impact}
                         </span>
                         <Button variant="ghost" size="sm" className="p-0 h-auto">

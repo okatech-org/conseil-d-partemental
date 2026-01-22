@@ -70,7 +70,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/95 dark:bg-green-950/95 backdrop-blur-md shadow-md' 
+          ? 'bg-background/95 dark:bg-emerald-950/95 backdrop-blur-md shadow-md border-b border-border' 
           : 'bg-transparent'
       }`}
     >
@@ -79,9 +79,9 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
           {/* Logo */}
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-              isScrolled ? 'bg-green-600' : 'bg-white/20'
+              isScrolled ? 'bg-emerald-600' : 'bg-white/20'
             }`}>
-              <Building2 className={`h-5 w-5 ${isScrolled ? 'text-white' : 'text-white'}`} />
+              <Building2 className="h-5 w-5 text-white" />
             </div>
             <div>
               <h1 className={`font-bold text-base sm:text-lg leading-tight transition-colors ${
@@ -105,7 +105,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
               className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                 location.pathname === '/conseil/woleu'
                   ? isScrolled 
-                    ? 'bg-green-600 text-white' 
+                    ? 'bg-emerald-600 text-white' 
                     : 'bg-white/20 text-white'
                   : isScrolled 
                     ? 'text-foreground hover:bg-muted' 
@@ -122,7 +122,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                   className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1 ${
                     isProgrammeActive
                       ? isScrolled 
-                        ? 'bg-green-600 text-white' 
+                        ? 'bg-emerald-600 text-white' 
                         : 'bg-white/20 text-white'
                       : isScrolled 
                         ? 'text-foreground hover:bg-muted' 
@@ -156,7 +156,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                 className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                   isActive(item.href)
                     ? isScrolled 
-                      ? 'bg-green-600 text-white' 
+                      ? 'bg-emerald-600 text-white' 
                       : 'bg-white/20 text-white'
                     : isScrolled 
                       ? 'text-foreground hover:bg-muted' 
@@ -194,7 +194,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
             <Link to="/conseil/woleu/connexion">
               <Button 
                 size="sm" 
-                className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold"
+                className="bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold"
               >
                 <UserPlus className="mr-2 h-4 w-4" />
                 Inscription
@@ -213,11 +213,11 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80 bg-green-950 border-green-800">
+            <SheetContent side="right" className="w-80 bg-emerald-950 border-emerald-800">
               <div className="flex flex-col h-full text-white">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-10 h-10 rounded-xl bg-green-700 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-700 flex items-center justify-center">
                     <Building2 className="h-5 w-5" />
                   </div>
                   <div>
@@ -233,7 +233,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                       location.pathname === '/conseil/woleu'
-                        ? "bg-green-700 font-medium" 
+                        ? "bg-emerald-700 font-medium" 
                         : "hover:bg-white/10"
                     }`}
                   >
@@ -254,7 +254,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                           onClick={() => setMobileOpen(false)}
                           className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                             active 
-                              ? "bg-green-700 font-medium" 
+                              ? "bg-emerald-700 font-medium" 
                               : "hover:bg-white/10"
                           }`}
                         >
@@ -278,7 +278,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                           onClick={() => setMobileOpen(false)}
                           className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                             active 
-                              ? "bg-green-700 font-medium" 
+                              ? "bg-emerald-700 font-medium" 
                               : "hover:bg-white/10"
                           }`}
                         >
@@ -318,7 +318,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                     </Button>
                   </Link>
                   <Link to="/conseil/woleu/connexion" onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold">
+                    <Button className="w-full bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold">
                       <UserPlus className="mr-2 h-4 w-4" />
                       Inscription
                     </Button>

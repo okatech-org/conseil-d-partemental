@@ -22,7 +22,7 @@ const socialLinks = [
 
 export const WoleuFooter: React.FC = () => {
   return (
-    <footer className="bg-green-950 text-white">
+    <footer className="bg-emerald-950 dark:bg-emerald-950 text-white">
       {/* Newsletter section */}
       <div className="border-b border-white/10">
         <div className="container mx-auto px-4 py-12">
@@ -39,9 +39,9 @@ export const WoleuFooter: React.FC = () => {
               <Input
                 type="email"
                 placeholder="Votre email"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-w-[250px]"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-w-[250px] focus-visible:ring-amber-400"
               />
-              <Button className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold whitespace-nowrap">
+              <Button className="bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold whitespace-nowrap">
                 S'inscrire
               </Button>
             </form>
@@ -55,7 +55,7 @@ export const WoleuFooter: React.FC = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-600 to-green-700 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-700 flex items-center justify-center shadow-lg">
                 <Building2 className="h-6 w-6 text-white" />
               </div>
               <div>

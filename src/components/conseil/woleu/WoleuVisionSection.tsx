@@ -34,7 +34,7 @@ export const WoleuVisionSection: React.FC = () => {
             Notre Vision
           </div>
           <h2 className="text-3xl md:text-5xl font-bold font-serif mb-4">
-            Le Constat & <span className="text-green-600 dark:text-green-400">La Vision</span>
+            Le Constat & <span className="text-emerald-600 dark:text-emerald-400">La Vision</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Comprendre les défis pour mieux construire l'avenir du Woleu
@@ -125,18 +125,18 @@ export const WoleuVisionSection: React.FC = () => {
             {/* Arrow separator */}
             <div className="flex items-center justify-center py-2">
               <motion.div 
-                className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shadow-lg"
+                className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shadow-lg"
                 animate={{ y: [0, 5, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <ArrowDown className="w-6 h-6 text-green-600" />
+                <ArrowDown className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
               </motion.div>
             </div>
 
             {/* Promises Card */}
-            <Card className="border-green-500/20 bg-green-50/50 dark:bg-green-900/10 overflow-hidden">
+            <Card className="border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-900/10 overflow-hidden">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-green-600 mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-emerald-600 dark:text-emerald-400 mb-4 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" />
                   Notre engagement
                 </h3>

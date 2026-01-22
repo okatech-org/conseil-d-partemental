@@ -65,12 +65,12 @@ export const WoleuPriorityAxes: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 rounded-full text-green-700 dark:text-green-400 text-sm font-medium mb-4">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-4">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
             Programme 2025
           </div>
           <h2 className="text-3xl md:text-5xl font-bold font-serif mb-4">
-            Les <span className="text-green-600 dark:text-green-400">5 Axes</span> Prioritaires
+            Les <span className="text-emerald-600 dark:text-emerald-400">5 Axes</span> Prioritaires
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Cinq piliers fondamentaux pour transformer le Woleu et améliorer 
@@ -165,7 +165,7 @@ export const WoleuPriorityAxes: React.FC = () => {
                     <span className={`text-sm font-semibold px-3 py-1 rounded-full bg-gradient-to-r ${axis.color} text-white`}>
                       {axis.stats}
                     </span>
-                    <Button variant="ghost" size="sm" className="text-green-600 hover:text-green-700 group/btn p-0">
+                    <Button variant="ghost" size="sm" className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 group/btn p-0">
                       En savoir plus
                       <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                     </Button>
