@@ -77,7 +77,7 @@ export const WoleuHeroSection: React.FC<WoleuHeroSectionProps> = ({
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white/30 text-white hover:bg-white/10 px-8"
+                className="border-white/50 bg-white/10 text-white hover:bg-white/20 hover:border-white/70 px-8 backdrop-blur-sm"
                 onClick={onViewProjects}
               >
                 Voir les projets
