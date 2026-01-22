@@ -11,47 +11,55 @@ import {
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+// Import generated images
+import featureVoteElectronique from "@/assets/landing/feature-vote-electronique.jpg";
+import featureGenerationPv from "@/assets/landing/feature-generation-pv.jpg";
+import featureDashboardBudget from "@/assets/landing/feature-dashboard-budget.jpg";
+import featureTransmission from "@/assets/landing/feature-transmission.jpg";
+import featureAlertes from "@/assets/landing/feature-alertes.jpg";
+import featureSignatureElectronique from "@/assets/landing/feature-signature-electronique.jpg";
+
 const features = [
   {
     icon: Vote,
     title: "Vote Électronique Sécurisé",
     description: "Système de vote conforme à l'Article 68 avec audit trail complet, gestion des mandats et voix prépondérante du président.",
-    image: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=600&q=80",
+    image: featureVoteElectronique,
     color: "bg-primary"
   },
   {
     icon: FileText,
     title: "Génération Automatique des PV",
     description: "Procès-verbaux conformes à l'Article 72 avec signature électronique et publication automatique sous 8 jours.",
-    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80",
+    image: featureGenerationPv,
     color: "bg-accent"
   },
   {
     icon: PieChart,
     title: "Tableaux de Bord en Temps Réel",
     description: "Suivi de l'exécution budgétaire, alertes automatiques et consolidation provinciale pour les gouverneurs.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80",
+    image: featureDashboardBudget,
     color: "bg-info"
   },
   {
     icon: Clock,
     title: "Transmission Instantanée",
     description: "Envoi automatique des actes à la tutelle sous 8 jours avec récépissé électronique instantané.",
-    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&q=80",
+    image: featureTransmission,
     color: "bg-secondary"
   },
   {
     icon: Bell,
     title: "Alertes Multi-Niveaux",
     description: "Notifications intelligentes par email et SMS pour les échéances budgétaires et les sessions obligatoires.",
-    image: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=600&q=80",
+    image: featureAlertes,
     color: "bg-warning"
   },
   {
     icon: Fingerprint,
     title: "Signature Électronique",
     description: "Signature sécurisée des délibérations, mandats et actes d'état civil avec authentification forte.",
-    image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=600&q=80",
+    image: featureSignatureElectronique,
     color: "bg-success"
   },
 ];

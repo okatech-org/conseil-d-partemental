@@ -1,6 +1,7 @@
 import LandingHeader from "@/components/landing/LandingHeader";
 import HeroSection from "@/components/landing/HeroSection";
 import QuickLinksSection from "@/components/landing/QuickLinksSection";
+import WoleuPioneerSection from "@/components/landing/WoleuPioneerSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import ProductShowcase from "@/components/landing/ProductShowcase";
 import BenefitsSection from "@/components/landing/BenefitsSection";
@@ -15,6 +16,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <QuickLinksSection />
+        <WoleuPioneerSection />
         <FeaturesSection />
         <ProductShowcase />
         <BenefitsSection />
