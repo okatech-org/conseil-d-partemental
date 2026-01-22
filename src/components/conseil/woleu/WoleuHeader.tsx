@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Building2, Menu, Sun, Moon, LogIn, UserPlus, Map, Home, Eye, Users as UsersIcon, BookOpen, Phone } from 'lucide-react';
+import { Building2, Menu, Sun, Moon, LogIn, UserPlus, Map, Home, FileText, Newspaper, Megaphone } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 
 interface WoleuHeaderProps {
-  onNavigate: (section: string) => void;
+  onNavigate?: (section: string) => void;
   activeSection?: string;
 }
 
 const navItems = [
-  { label: "Accueil", value: "hero", icon: Home },
-  { label: "Notre Vision", value: "vision", icon: Eye },
-  { label: "Les 5 Chantiers", value: "axes", icon: BookOpen },
-  { label: "Woleu Transparent", value: "transparent", icon: Eye },
-  { label: "Cercles Citoyens", value: "cercles", icon: UsersIcon },
-  { label: "Conseils", href: "/conseils", icon: Map },
-  { label: "Contact", value: "contact", icon: Phone }
+  { label: "Accueil", href: "/conseil/woleu", icon: Home },
+  { label: "Programme", href: "/conseil/woleu/programme", icon: FileText },
+  { label: "Actualités", href: "/conseil/woleu/actualites", icon: Newspaper },
+  { label: "Sensibilisation", href: "/conseil/woleu/sensibilisation", icon: Megaphone },
+  { label: "Conseils", href: "/conseils", icon: Map }
 ];
 
 export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSection }) => {
@@ -26,6 +24,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
+  const location = useLocation();
 
   useEffect(() => {
     setMounted(true);
@@ -39,9 +38,11 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (value: string) => {
-    onNavigate(value);
-    setMobileOpen(false);
+  const isActive = (href: string) => {
+    if (href === '/conseil/woleu') {
+      return location.pathname === '/conseil/woleu';
+    }
+    return location.pathname.startsWith(href);
   };
 
   return (
@@ -80,35 +81,21 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
-              item.href ? (
-                <Link
-                  key={item.label}
-                  to={item.href}
-                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    isScrolled 
+              <Link
+                key={item.label}
+                to={item.href}
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  isActive(item.href)
+                    ? isScrolled 
+                      ? 'bg-green-600 text-white' 
+                      : 'bg-white/20 text-white'
+                    : isScrolled 
                       ? 'text-foreground hover:bg-muted' 
                       : 'text-white/80 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <button
-                  key={item.label}
-                  onClick={() => handleNavClick(item.value!)}
-                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    activeSection === item.value
-                      ? isScrolled 
-                        ? 'bg-green-600 text-white' 
-                        : 'bg-white/20 text-white'
-                      : isScrolled 
-                        ? 'text-foreground hover:bg-muted' 
-                        : 'text-white/80 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              )
+                }`}
+              >
+                {item.label}
+              </Link>
             ))}
           </nav>
 
@@ -170,30 +157,21 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                 <nav className="flex-1 space-y-1">
                   {navItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = activeSection === item.value;
-                    return item.href ? (
+                    const active = isActive(item.href);
+                    return (
                       <Link
                         key={item.label}
                         to={item.href}
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-white/10"
-                      >
-                        <Icon className="h-5 w-5" />
-                        {item.label}
-                      </Link>
-                    ) : (
-                      <button
-                        key={item.label}
-                        onClick={() => handleNavClick(item.value!)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                          isActive 
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                          active 
                             ? "bg-green-700 font-medium" 
                             : "hover:bg-white/10"
                         }`}
                       >
                         <Icon className="h-5 w-5" />
                         {item.label}
-                      </button>
+                      </Link>
                     );
                   })}
                 </nav>

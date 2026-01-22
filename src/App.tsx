@@ -18,6 +18,9 @@ import { DemoConseillPage } from "./pages/demo/DemoConseillPage";
 import { DemoMapPage } from "./pages/demo/DemoMapPage";
 import { ConseilHomePage } from "./pages/conseil/ConseilHomePage";
 import { WoleuHomePage } from "./pages/conseil/WoleuHomePage";
+import { WoleuProgramPage } from "./pages/conseil/woleu/WoleuProgramPage";
+import { WoleuActualitesPage } from "./pages/conseil/woleu/WoleuActualitesPage";
+import { WoleuSensibilisationPage } from "./pages/conseil/woleu/WoleuSensibilisationPage";
 
 // Public pages
 import { HomePage } from "./pages/public/HomePage";
@@ -49,8 +52,11 @@ const App = () => (
               {/* Map of 42 departmental councils */}
               <Route path="/conseils" element={<DemoMapPage />} />
               
-              {/* Special page for Woleu */}
+              {/* Woleu special pages */}
               <Route path="/conseil/woleu" element={<WoleuHomePage />} />
+              <Route path="/conseil/woleu/programme" element={<WoleuProgramPage />} />
+              <Route path="/conseil/woleu/actualites" element={<WoleuActualitesPage />} />
+              <Route path="/conseil/woleu/sensibilisation" element={<WoleuSensibilisationPage />} />
               
               {/* Individual departmental council pages */}
               <Route path="/conseil/:departmentId" element={<ConseilHomePage />} />
