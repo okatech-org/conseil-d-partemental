@@ -1,22 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Building2, Menu, Sun, Moon, LogIn, UserPlus, Map, Home, FileText, Newspaper, Megaphone } from 'lucide-react';
+import { 
+  Building2, Menu, Sun, Moon, LogIn, UserPlus, Map, Home, 
+  FileText, Newspaper, Megaphone, Eye, Users, Sprout, ChevronDown 
+} from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface WoleuHeaderProps {
   onNavigate?: (section: string) => void;
   activeSection?: string;
 }
 
-const navItems = [
+const mainNavItems = [
   { label: "Accueil", href: "/conseil/woleu", icon: Home },
-  { label: "Programme", href: "/conseil/woleu/programme", icon: FileText },
   { label: "Actualités", href: "/conseil/woleu/actualites", icon: Newspaper },
   { label: "Sensibilisation", href: "/conseil/woleu/sensibilisation", icon: Megaphone },
   { label: "Conseils", href: "/conseils", icon: Map }
+];
+
+const programmeItems = [
+  { label: "Vue d'ensemble", href: "/conseil/woleu/programme", icon: FileText },
+  { label: "Notre Vision", href: "/conseil/woleu/vision", icon: Eye },
+  { label: "Les 5 Chantiers", href: "/conseil/woleu/chantiers", icon: Building2 },
+  { label: "Woleu Transparent", href: "/conseil/woleu/transparent", icon: Sprout },
+  { label: "Cercles Citoyens", href: "/conseil/woleu/cercles", icon: Users }
 ];
 
 export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSection }) => {
@@ -44,6 +60,8 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
     }
     return location.pathname.startsWith(href);
   };
+
+  const isProgrammeActive = programmeItems.some(item => location.pathname === item.href);
 
   return (
     <motion.header
@@ -80,7 +98,57 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => (
+            {/* Accueil */}
+            <Link
+              to="/conseil/woleu"
+              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                location.pathname === '/conseil/woleu'
+                  ? isScrolled 
+                    ? 'bg-green-600 text-white' 
+                    : 'bg-white/20 text-white'
+                  : isScrolled 
+                    ? 'text-foreground hover:bg-muted' 
+                    : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              Accueil
+            </Link>
+
+            {/* Programme Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1 ${
+                    isProgrammeActive
+                      ? isScrolled 
+                        ? 'bg-green-600 text-white' 
+                        : 'bg-white/20 text-white'
+                      : isScrolled 
+                        ? 'text-foreground hover:bg-muted' 
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  Programme
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                {programmeItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <DropdownMenuItem key={item.href} asChild>
+                      <Link to={item.href} className="flex items-center gap-2 cursor-pointer">
+                        <Icon className="w-4 h-4" />
+                        {item.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Other nav items */}
+            {mainNavItems.slice(1).map((item) => (
               <Link
                 key={item.label}
                 to={item.href}
@@ -154,26 +222,67 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 space-y-1">
-                  {navItems.map((item) => {
-                    const Icon = item.icon;
-                    const active = isActive(item.href);
-                    return (
-                      <Link
-                        key={item.label}
-                        to={item.href}
-                        onClick={() => setMobileOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                          active 
-                            ? "bg-green-700 font-medium" 
-                            : "hover:bg-white/10"
-                        }`}
-                      >
-                        <Icon className="h-5 w-5" />
-                        {item.label}
-                      </Link>
-                    );
-                  })}
+                <nav className="flex-1 space-y-1 overflow-y-auto">
+                  <Link
+                    to="/conseil/woleu"
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                      location.pathname === '/conseil/woleu'
+                        ? "bg-green-700 font-medium" 
+                        : "hover:bg-white/10"
+                    }`}
+                  >
+                    <Home className="h-5 w-5" />
+                    Accueil
+                  </Link>
+
+                  {/* Programme section */}
+                  <div className="pt-2">
+                    <p className="px-4 py-2 text-xs text-white/50 uppercase tracking-wider">Programme</p>
+                    {programmeItems.map((item) => {
+                      const Icon = item.icon;
+                      const active = location.pathname === item.href;
+                      return (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            active 
+                              ? "bg-green-700 font-medium" 
+                              : "hover:bg-white/10"
+                          }`}
+                        >
+                          <Icon className="h-5 w-5" />
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  {/* Other items */}
+                  <div className="pt-2">
+                    <p className="px-4 py-2 text-xs text-white/50 uppercase tracking-wider">Navigation</p>
+                    {mainNavItems.slice(1).map((item) => {
+                      const Icon = item.icon;
+                      const active = isActive(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            active 
+                              ? "bg-green-700 font-medium" 
+                              : "hover:bg-white/10"
+                          }`}
+                        >
+                          <Icon className="h-5 w-5" />
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </nav>
 
                 {/* Actions */}
