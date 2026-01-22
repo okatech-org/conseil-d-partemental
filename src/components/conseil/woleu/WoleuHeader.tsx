@@ -175,7 +175,12 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
                 variant="ghost" 
                 size="icon"
                 onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-                className={isScrolled ? '' : 'text-white hover:bg-white/10'}
+                className={`relative overflow-hidden ${
+                  isScrolled 
+                    ? 'text-foreground hover:bg-muted' 
+                    : 'text-white hover:bg-white/10'
+                }`}
+                aria-label={resolvedTheme === 'dark' ? 'Passer au mode clair' : 'Passer au mode sombre'}
               >
                 <Sun className={`h-5 w-5 transition-all duration-300 ${resolvedTheme === 'dark' ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
                 <Moon className={`absolute h-5 w-5 transition-all duration-300 ${resolvedTheme === 'dark' ? "rotate-90 scale-0" : "rotate-0 scale-100"}`} />
@@ -183,9 +188,13 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
             )}
             <Link to="/conseil/woleu/connexion">
               <Button 
-                variant={isScrolled ? "ghost" : "outline"} 
+                variant="outline" 
                 size="sm"
-                className={isScrolled ? '' : 'border-white/30 text-white hover:bg-white/10'}
+                className={
+                  isScrolled 
+                    ? 'border-border text-foreground hover:bg-muted' 
+                    : 'border-white/40 text-white hover:bg-white/10 bg-white/5'
+                }
               >
                 <LogIn className="mr-2 h-4 w-4" />
                 Connexion
@@ -194,7 +203,7 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
             <Link to="/conseil/woleu/connexion">
               <Button 
                 size="sm" 
-                className="bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold"
+                className="bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold shadow-md"
               >
                 <UserPlus className="mr-2 h-4 w-4" />
                 Inscription
@@ -208,7 +217,11 @@ export const WoleuHeader: React.FC<WoleuHeaderProps> = ({ onNavigate, activeSect
               <Button 
                 variant="ghost" 
                 size="icon"
-                className={isScrolled ? '' : 'text-white hover:bg-white/10'}
+                className={
+                  isScrolled 
+                    ? 'text-foreground hover:bg-muted' 
+                    : 'text-white hover:bg-white/10'
+                }
               >
                 <Menu className="h-6 w-6" />
               </Button>
