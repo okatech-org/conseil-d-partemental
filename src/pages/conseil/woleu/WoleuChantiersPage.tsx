@@ -13,6 +13,13 @@ import {
   Droplets, Sun, Car, Wifi, Users
 } from 'lucide-react';
 
+// Import images for each chantier
+import chantierInfrastructure from '@/assets/woleu/chantier-infrastructure.jpg';
+import chantierSante from '@/assets/woleu/chantier-sante.jpg';
+import chantierEducation from '@/assets/woleu/chantier-education.jpg';
+import chantierEconomie from '@/assets/woleu/chantier-economie.jpg';
+import pontConstruction from '@/assets/woleu/pont-construction.jpg';
+
 const chantiers = [
   {
     id: 'infrastructure',
@@ -21,6 +28,7 @@ const chantiers = [
     subtitle: "Routes, ponts et désenclavement",
     color: "bg-orange-500",
     lightBg: "bg-orange-50 dark:bg-orange-950/20",
+    image: chantierInfrastructure,
     description: "Le désenclavement du Woleu est notre priorité absolue. Sans routes praticables, aucun développement économique ni accès aux services n'est possible.",
     objectives: [
       "Bitumer les axes prioritaires Oyem-Bitam et Oyem-Mitzic",
@@ -40,6 +48,7 @@ const chantiers = [
     id: 'sante',
     icon: HeartPulse,
     title: "Santé",
+    image: chantierSante,
     subtitle: "Accès aux soins pour tous",
     color: "bg-red-500",
     lightBg: "bg-red-50 dark:bg-red-950/20",
@@ -65,6 +74,7 @@ const chantiers = [
     subtitle: "Préparer l'avenir de nos enfants",
     color: "bg-blue-500",
     lightBg: "bg-blue-50 dark:bg-blue-950/20",
+    image: chantierEducation,
     description: "L'éducation est le meilleur investissement pour l'avenir. Nous voulons offrir à chaque enfant du Woleu les moyens de réussir.",
     objectives: [
       "Rénover toutes les écoles primaires du département",
@@ -87,6 +97,7 @@ const chantiers = [
     subtitle: "Transparence et participation",
     color: "bg-purple-500",
     lightBg: "bg-purple-50 dark:bg-purple-950/20",
+    image: pontConstruction,
     description: "La confiance des citoyens passe par une gestion irréprochable des affaires publiques et leur implication dans les décisions.",
     objectives: [
       "Publier en temps réel toutes les dépenses du département",
@@ -109,6 +120,7 @@ const chantiers = [
     subtitle: "Agriculture et emplois verts",
     color: "bg-green-500",
     lightBg: "bg-green-50 dark:bg-green-950/20",
+    image: chantierEconomie,
     description: "Le développement économique doit être endogène et durable. Nous misons sur l'agriculture et les énergies renouvelables.",
     objectives: [
       "Créer la coopérative 'Produisons Woleu'",
@@ -222,8 +234,17 @@ export const WoleuChantiersPage: React.FC = () => {
                   <div className="grid lg:grid-cols-3 gap-8">
                     {/* Info Column */}
                     <div className="lg:col-span-1">
-                      <div className={`w-16 h-16 rounded-2xl ${chantier.color} flex items-center justify-center mb-4`}>
-                        <Icon className="h-8 w-8 text-white" />
+                      {/* Image */}
+                      <div className="relative rounded-xl overflow-hidden mb-6 shadow-lg">
+                        <img 
+                          src={chantier.image} 
+                          alt={chantier.title}
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-t from-black/60 to-transparent`} />
+                        <div className={`absolute bottom-3 left-3 w-12 h-12 rounded-xl ${chantier.color} flex items-center justify-center`}>
+                          <Icon className="h-6 w-6 text-white" />
+                        </div>
                       </div>
                       <Badge className="mb-2" variant="outline">Chantier {chantierIndex + 1}</Badge>
                       <h2 className="text-3xl font-bold font-serif mb-2">{chantier.title}</h2>

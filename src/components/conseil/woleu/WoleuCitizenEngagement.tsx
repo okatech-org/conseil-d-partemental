@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import cercleCitoyenImg from '@/assets/woleu/cercle-citoyen.jpg';
 
 const circles = [
   { name: "Cercle Canton Kyé", members: 45, nextMeeting: "25 Jan 2025" },
@@ -41,8 +42,17 @@ export const WoleuCitizenEngagement: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-green-700 via-green-800 to-green-900 text-white">
-      <div className="container mx-auto px-4">
+    <section className="py-20 relative overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img 
+          src={cercleCitoyenImg} 
+          alt="Cercle citoyen" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-green-800/95 via-green-900/90 to-green-900/95" />
+      </div>
+      <div className="container mx-auto px-4 relative z-10 text-white">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
           <motion.div

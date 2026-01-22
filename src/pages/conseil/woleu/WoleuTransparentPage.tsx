@@ -13,6 +13,7 @@ import {
   Building2, HeartPulse, GraduationCap, Sprout, CheckCircle2,
   AlertCircle, Clock, BarChart3
 } from 'lucide-react';
+import transparentMeetingImg from '@/assets/woleu/transparent-meeting.jpg';
 
 const budgetOverview = {
   total: 2800000000,
@@ -64,7 +65,15 @@ export const WoleuTransparentPage: React.FC = () => {
       <WoleuHeader />
       
       {/* Hero */}
-      <section className="relative pt-24 pb-16 bg-gradient-to-br from-green-800 via-green-700 to-green-600 overflow-hidden">
+      <section className="relative pt-24 pb-16 overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={transparentMeetingImg} 
+            alt="Réunion transparente du Conseil" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-green-900/95 via-green-800/90 to-green-700/85" />
+        </div>
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>

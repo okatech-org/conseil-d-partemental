@@ -11,6 +11,14 @@ import {
   Filter, Building2, HeartPulse, GraduationCap, Users, Sprout 
 } from 'lucide-react';
 
+// Import images
+import actualitesMediaImg from '@/assets/woleu/actualites-media.jpg';
+import energieSolaireImg from '@/assets/woleu/energie-solaire.jpg';
+import chantierSanteImg from '@/assets/woleu/chantier-sante.jpg';
+import chantierInfrastructureImg from '@/assets/woleu/chantier-infrastructure.jpg';
+import chantierEducationImg from '@/assets/woleu/chantier-education.jpg';
+import cercleCitoyenImg from '@/assets/woleu/cercle-citoyen.jpg';
+
 const categories = [
   { id: 'all', label: 'Tous', icon: Newspaper },
   { id: 'infrastructure', label: 'Infrastructure', icon: Building2 },
@@ -29,7 +37,7 @@ const actualites = [
     date: '2025-01-20',
     readTime: '5 min',
     featured: true,
-    image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80'
+    image: energieSolaireImg
   },
   {
     id: 2,
@@ -39,7 +47,7 @@ const actualites = [
     date: '2025-01-18',
     readTime: '3 min',
     featured: true,
-    image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80'
+    image: chantierSanteImg
   },
   {
     id: 3,
@@ -49,7 +57,7 @@ const actualites = [
     date: '2025-01-15',
     readTime: '4 min',
     featured: false,
-    image: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=800&q=80'
+    image: chantierInfrastructureImg
   },
   {
     id: 4,
@@ -59,7 +67,7 @@ const actualites = [
     date: '2025-01-12',
     readTime: '3 min',
     featured: false,
-    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80'
+    image: chantierEducationImg
   },
   {
     id: 5,
@@ -69,7 +77,7 @@ const actualites = [
     date: '2025-01-10',
     readTime: '4 min',
     featured: false,
-    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80'
+    image: cercleCitoyenImg
   },
   {
     id: 6,
@@ -79,7 +87,7 @@ const actualites = [
     date: '2025-01-08',
     readTime: '2 min',
     featured: false,
-    image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&q=80'
+    image: chantierEducationImg
   }
 ];
 
@@ -106,7 +114,15 @@ export const WoleuActualitesPage: React.FC = () => {
       <WoleuHeader onNavigate={() => {}} activeSection="actualites" />
       
       {/* Hero */}
-      <section className="relative pt-24 pb-12 bg-gradient-to-br from-green-800 via-green-700 to-green-600">
+      <section className="relative pt-24 pb-12 overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={actualitesMediaImg} 
+            alt="Actualités Woleu" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-green-900/95 via-green-800/90 to-green-700/85" />
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

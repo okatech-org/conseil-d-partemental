@@ -9,6 +9,7 @@ import {
   Eye, Quote, CheckCircle2, Target, Heart, Users, 
   Lightbulb, Shield, ArrowRight, Star, Compass
 } from 'lucide-react';
+import visionLeadershipImg from '@/assets/woleu/vision-leadership.jpg';
 
 const coreValues = [
   {
@@ -106,34 +107,44 @@ export const WoleuVisionPage: React.FC = () => {
         <div className="absolute bottom-10 left-10 w-48 h-48 bg-green-400/10 rounded-full blur-3xl" />
       </section>
 
-      {/* Main Quote */}
+      {/* Main Quote with Image */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
+            className="max-w-5xl mx-auto"
           >
-            <Card className="bg-gradient-to-br from-green-700 to-green-800 text-white border-0 overflow-hidden relative">
-              <Quote className="absolute top-4 right-4 h-32 w-32 text-white/10" />
-              <CardContent className="p-8 md:p-12">
-                <blockquote className="text-2xl md:text-3xl font-serif leading-relaxed mb-8 relative z-10">
-                  "Le Woleu mérite mieux. L'ère de l'opacité est terminée. 
-                  Ensemble, nous bâtirons un département où la transparence n'est pas 
-                  un slogan, mais une réalité quotidienne."
-                </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-xl font-bold text-green-900">
-                    MO
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img 
+                  src={visionLeadershipImg} 
+                  alt="Réunion de leadership du Conseil Départemental" 
+                  className="w-full h-80 lg:h-96 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-green-900/60 to-transparent" />
+              </div>
+              <Card className="bg-gradient-to-br from-green-700 to-green-800 text-white border-0 overflow-hidden relative">
+                <Quote className="absolute top-4 right-4 h-32 w-32 text-white/10" />
+                <CardContent className="p-8 md:p-10">
+                  <blockquote className="text-xl md:text-2xl font-serif leading-relaxed mb-8 relative z-10">
+                    "Le Woleu mérite mieux. L'ère de l'opacité est terminée. 
+                    Ensemble, nous bâtirons un département où la transparence n'est pas 
+                    un slogan, mais une réalité quotidienne."
+                  </blockquote>
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-lg font-bold text-green-900">
+                      MO
+                    </div>
+                    <div>
+                      <div className="font-semibold text-lg">Marc Ona Essangui</div>
+                      <div className="text-white/70 text-sm">Tête de liste • Union Démocratique des Bâtisseurs</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-semibold text-lg">Marc Ona Essangui</div>
-                    <div className="text-white/70">Tête de liste • Union Démocratique des Bâtisseurs</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </motion.div>
         </div>
       </section>
