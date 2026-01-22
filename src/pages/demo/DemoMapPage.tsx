@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Building2, MapPin, Info, Globe, ChevronRight, 
+  Building2, MapPin, Info, Globe, ChevronRight, ChevronDown, ChevronUp,
   Search, Filter, Users, Wallet, Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,8 +20,21 @@ export const DemoMapPage: React.FC = () => {
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [provinceFilter, setProvinceFilter] = useState<string>('all');
+  const [expandedProvinces, setExpandedProvinces] = useState<Set<string>>(new Set());
   
   const stats = getTotalDemoStats();
+
+  const toggleProvinceExpanded = (provinceId: string) => {
+    setExpandedProvinces(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(provinceId)) {
+        newSet.delete(provinceId);
+      } else {
+        newSet.add(provinceId);
+      }
+      return newSet;
+    });
+  };
 
   const handleDepartmentSelect = (deptId: string, provinceId: string) => {
     setSelectedDepartment(deptId);
@@ -192,7 +205,10 @@ export const DemoMapPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      {province.departments.slice(0, 3).map(dept => (
+                      {(expandedProvinces.has(province.id) 
+                        ? province.departments 
+                        : province.departments.slice(0, 3)
+                      ).map(dept => (
                         <Button
                           key={dept.id}
                           variant="ghost"
@@ -208,9 +224,24 @@ export const DemoMapPage: React.FC = () => {
                         </Button>
                       ))}
                       {province.departments.length > 3 && (
-                        <p className="text-xs text-center text-muted-foreground">
-                          +{province.departments.length - 3} autres départements
-                        </p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full gap-2"
+                          onClick={() => toggleProvinceExpanded(province.id)}
+                        >
+                          {expandedProvinces.has(province.id) ? (
+                            <>
+                              <ChevronUp className="h-4 w-4" />
+                              Réduire
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown className="h-4 w-4" />
+                              Voir les {province.departments.length - 3} autres
+                            </>
+                          )}
+                        </Button>
                       )}
                     </div>
                   </CardContent>
