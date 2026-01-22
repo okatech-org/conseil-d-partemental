@@ -2,12 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { WoleuHeader } from '@/components/conseil/woleu/WoleuHeader';
 import { WoleuFooter } from '@/components/conseil/woleu/WoleuFooter';
+import { WoleuPhotoGallery } from '@/components/conseil/woleu/WoleuPhotoGallery';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
   Eye, Quote, CheckCircle2, Target, Heart, Users, 
-  Lightbulb, Shield, ArrowRight, Star, Compass, Calendar
+  Lightbulb, Shield, ArrowRight, Star, Compass, Calendar, Camera
 } from 'lucide-react';
 import visionLeadershipImg from '@/assets/woleu/vision-leadership.jpg';
 import valueIntegriteImg from '@/assets/woleu/value-integrite.jpg';
@@ -492,6 +493,31 @@ export const WoleuVisionPage: React.FC = () => {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Photo Gallery Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-100 dark:bg-green-900/30 rounded-full text-green-700 dark:text-green-400 text-sm font-medium mb-5">
+              <Camera className="w-4 h-4" />
+              Galerie Photos
+            </div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-serif mb-5">
+              Le Woleu en images
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Découvrez notre département, ses infrastructures, ses projets et sa communauté
+            </p>
+          </motion.div>
+
+          <WoleuPhotoGallery />
         </div>
       </section>
 
