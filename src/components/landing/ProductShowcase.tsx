@@ -10,6 +10,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+// Import generated images
+import showcaseBudget from "@/assets/landing/showcase-budget.jpg";
+import showcaseTutelle from "@/assets/landing/showcase-tutelle.jpg";
+import showcaseCitoyen from "@/assets/landing/showcase-citoyen.jpg";
+
 const showcaseSections = [
   {
     badge: { icon: BarChart3, text: "Module Budget" },
@@ -21,7 +26,7 @@ const showcaseSections = [
       "Nomenclature budgétaire standardisée",
       "Génération automatique des documents requis"
     ],
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+    image: showcaseBudget,
     stats: [
       { value: "80%", label: "Réduction délais" },
       { value: "100%", label: "Automatisation" }
@@ -38,7 +43,7 @@ const showcaseSections = [
       "Chronomètre automatique 15 jours",
       "Tableaux de bord consolidés par province"
     ],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+    image: showcaseTutelle,
     stats: [
       { value: "8j", label: "Délai max" },
       { value: "100%", label: "Traçabilité" }
@@ -55,7 +60,7 @@ const showcaseSections = [
       "Référendum d'initiative locale",
       "Application mobile disponible"
     ],
-    image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&q=80",
+    image: showcaseCitoyen,
     stats: [
       { value: "2.5M", label: "Citoyens servis" },
       { value: "24/7", label: "Accessibilité" }

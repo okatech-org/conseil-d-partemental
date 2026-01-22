@@ -16,6 +16,7 @@ import {
   Globe
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import heroGabonCityscape from "@/assets/landing/hero-gabon-cityscape.jpg";
 
 const HeroSection = () => {
   const miniFeatures = [
@@ -40,7 +41,7 @@ const HeroSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80')`,
+          backgroundImage: `url(${heroGabonCityscape})`,
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70" />
