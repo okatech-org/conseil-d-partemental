@@ -85,7 +85,7 @@ export const WoleuCitizenEngagement: React.FC = () => {
           alt="Cercle citoyen" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-green-900/95 via-green-800/90 to-green-900/95" />
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/95 via-emerald-800/90 to-emerald-900/95" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10 text-white">
@@ -163,7 +163,7 @@ export const WoleuCitizenEngagement: React.FC = () => {
                     />
                     <Button 
                       type="submit"
-                      className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold"
+                      className="bg-amber-500 hover:bg-amber-600 text-emerald-900 font-semibold"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -194,7 +194,7 @@ export const WoleuCitizenEngagement: React.FC = () => {
                 <MapPin className="w-5 h-5 text-amber-400" />
                 Cercles actifs dans le Woleu
               </h3>
-              <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
+              <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
                 4 cercles actifs
               </Badge>
             </div>

@@ -61,10 +61,19 @@
     --province-ogooue-maritime: 200 70% 50%;
     --province-woleu-ntem: 100 55% 45%;
 
+    /* Woleu-specific theme tokens */
+    --woleu-primary: 152 60% 30%;
+    --woleu-primary-foreground: 0 0% 100%;
+    --woleu-accent: 45 93% 50%;
+    --woleu-accent-foreground: 152 60% 15%;
+    --woleu-surface: 152 30% 96%;
+    --woleu-surface-foreground: 152 60% 15%;
+
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(222 47% 15%) 0%, hsl(222 47% 25%) 50%, hsl(205 75% 35%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(45 93% 47%) 0%, hsl(38 90% 55%) 100%);
     --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 25% 98%) 100%);
+    --gradient-woleu: linear-gradient(135deg, hsl(152 60% 25%) 0%, hsl(152 50% 35%) 50%, hsl(160 55% 40%) 100%);
     
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -133,10 +142,19 @@
     --province-ogooue-maritime: 200 70% 55%;
     --province-woleu-ntem: 100 55% 50%;
 
+    /* Dark mode Woleu-specific theme tokens */
+    --woleu-primary: 152 60% 45%;
+    --woleu-primary-foreground: 0 0% 100%;
+    --woleu-accent: 45 93% 55%;
+    --woleu-accent-foreground: 152 60% 10%;
+    --woleu-surface: 152 30% 12%;
+    --woleu-surface-foreground: 152 20% 90%;
+
     /* Dark mode gradients */
     --gradient-hero: linear-gradient(135deg, hsl(222 47% 12%) 0%, hsl(222 47% 18%) 50%, hsl(205 75% 25%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(45 93% 55%) 0%, hsl(38 90% 60%) 100%);
     --gradient-card: linear-gradient(180deg, hsl(222 47% 10%) 0%, hsl(222 47% 8%) 100%);
+    --gradient-woleu: linear-gradient(135deg, hsl(152 60% 20%) 0%, hsl(152 50% 28%) 50%, hsl(160 55% 32%) 100%);
     
     /* Dark mode shadows - more subtle */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
