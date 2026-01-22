@@ -53,8 +53,6 @@ const navItems = [
   { label: "Conseils", href: "/conseils", icon: Map },
   { label: "Actualités", value: "actualites", icon: Newspaper },
   { label: "Sensibilisation", value: "sensibilisation", icon: Bell },
-  { label: "Tutoriels", value: "tutoriels", icon: Video },
-  { label: "Processus", value: "processus", icon: ListChecks },
   { label: "Démo", value: "demo", icon: PlayCircle }
 ];
 
@@ -176,9 +174,6 @@ export const ConseilHomePage: React.FC = () => {
                   <Moon className={`absolute h-5 w-5 transition-all duration-300 ${resolvedTheme === 'dark' ? "rotate-90 scale-0" : "rotate-0 scale-100"}`} />
                 </Button>
               )}
-              <Badge variant={department.status === 'operational' ? 'default' : 'secondary'}>
-                {department.status === 'operational' ? '✓ Opérationnel' : '⟳ Transition'}
-              </Badge>
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -258,9 +253,6 @@ export const ConseilHomePage: React.FC = () => {
                   </nav>
 
                   <div className="space-y-3 pt-6 border-t border-border">
-                    <Badge variant={department.status === 'operational' ? 'default' : 'secondary'} className="w-full justify-center">
-                      {department.status === 'operational' ? '✓ Opérationnel' : '⟳ Transition'}
-                    </Badge>
                     {mounted && (
                       <Button 
                         variant="outline" 
@@ -614,111 +606,6 @@ export const ConseilHomePage: React.FC = () => {
                         <Button variant="outline" size="sm">Participer</Button>
                       </CardContent>
                     </Card>
-                  </div>
-                </TabsContent>
-              </motion.div>
-            )}
-
-            {activeTab === 'tutoriels' && (
-              <motion.div
-                key="tutoriels"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <TabsContent value="tutoriels" className="space-y-6 mt-0" forceMount>
-                  <div className="text-center py-4">
-                    <Video className="h-12 w-12 mx-auto mb-4 text-primary" />
-                    <h2 className="text-2xl font-bold mb-2">Tutoriels vidéo</h2>
-                    <p className="text-muted-foreground">Apprenez à utiliser les services numériques du département</p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {mockTutoriels.map((tuto, index) => (
-                      <motion.div
-                        key={tuto.id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <Card className="hover:shadow-md transition-shadow cursor-pointer group">
-                          <CardContent className="p-4">
-                            <div className="flex items-center gap-4">
-                              <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                <tuto.icon className="h-8 w-8 text-primary" />
-                              </div>
-                              <div className="flex-1">
-                                <h3 className="font-semibold mb-1">{tuto.title}</h3>
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                  <Clock className="h-3 w-3" />
-                                  <span>{tuto.duration}</span>
-                                </div>
-                              </div>
-                              <Button variant="ghost" size="icon">
-                                <PlayCircle className="h-6 w-6 text-primary" />
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
-                  </div>
-                </TabsContent>
-              </motion.div>
-            )}
-
-            {activeTab === 'processus' && (
-              <motion.div
-                key="processus"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <TabsContent value="processus" className="space-y-6 mt-0" forceMount>
-                  <div className="text-center py-4">
-                    <ListChecks className="h-12 w-12 mx-auto mb-4 text-primary" />
-                    <h2 className="text-2xl font-bold mb-2">Démarches administratives</h2>
-                    <p className="text-muted-foreground">Toutes les procédures et leurs étapes</p>
-                  </div>
-
-                  <div className="grid gap-4">
-                    {mockProcessus.map((proc, index) => (
-                      <motion.div
-                        key={proc.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <Card className="hover:shadow-md transition-shadow">
-                          <CardContent className="p-4">
-                            <div className="flex items-center justify-between gap-4">
-                              <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                                  <FileText className="h-6 w-6 text-primary" />
-                                </div>
-                                <div>
-                                  <h3 className="font-semibold">{proc.title}</h3>
-                                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                                    <span className="flex items-center gap-1">
-                                      <ListChecks className="h-3 w-3" /> {proc.steps} étapes
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                      <Clock className="h-3 w-3" /> {proc.duration}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                              <Button variant="outline" size="sm">
-                                Commencer
-                                <ChevronRight className="h-4 w-4 ml-1" />
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
                   </div>
                 </TabsContent>
               </motion.div>
