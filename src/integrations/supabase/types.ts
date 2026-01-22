@@ -14,7 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      woleu_budget_categories: {
+        Row: {
+          amount: number
+          color: string
+          created_at: string
+          display_order: number
+          fiscal_year: number
+          icon: string | null
+          id: string
+          name: string
+          percentage: number
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          color?: string
+          created_at?: string
+          display_order?: number
+          fiscal_year?: number
+          icon?: string | null
+          id?: string
+          name: string
+          percentage?: number
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          color?: string
+          created_at?: string
+          display_order?: number
+          fiscal_year?: number
+          icon?: string | null
+          id?: string
+          name?: string
+          percentage?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      woleu_budget_overview: {
+        Row: {
+          available: number
+          committed: number
+          created_at: string
+          fiscal_year: number
+          id: string
+          spent: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          available?: number
+          committed?: number
+          created_at?: string
+          fiscal_year?: number
+          id?: string
+          spent?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          available?: number
+          committed?: number
+          created_at?: string
+          fiscal_year?: number
+          id?: string
+          spent?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      woleu_projects: {
+        Row: {
+          budget: number
+          category: string | null
+          created_at: string
+          description: string | null
+          expected_end_date: string | null
+          id: string
+          location: string | null
+          name: string
+          progress: number
+          spent: number
+          start_date: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          budget?: number
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          expected_end_date?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          progress?: number
+          spent?: number
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          budget?: number
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          expected_end_date?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          progress?: number
+          spent?: number
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      woleu_transactions: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string
+          id: string
+          notes: string | null
+          reference_number: string | null
+          transaction_date: string
+          transaction_type: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          notes?: string | null
+          reference_number?: string | null
+          transaction_date?: string
+          transaction_type: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          notes?: string | null
+          reference_number?: string | null
+          transaction_date?: string
+          transaction_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
