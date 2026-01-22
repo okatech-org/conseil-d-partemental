@@ -1,25 +1,53 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, MapPin, Calendar, ArrowRight, CheckCircle2, Send } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Users, MapPin, Calendar, ArrowRight, CheckCircle2, Send, Clock, Sparkles } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import cercleCitoyenImg from '@/assets/woleu/cercle-citoyen.jpg';
+import cercleKye from '@/assets/woleu/cercle-kye.jpg';
+import cercleMitzic from '@/assets/woleu/cercle-mitzic.jpg';
+import cercleOyem from '@/assets/woleu/cercle-oyem.jpg';
+import cercleMinvoul from '@/assets/woleu/cercle-minvoul.jpg';
 
 const circles = [
-  { name: "Cercle Canton Kyé", members: 45, nextMeeting: "25 Jan 2025" },
-  { name: "Cercle Canton Mitzic", members: 62, nextMeeting: "28 Jan 2025" },
-  { name: "Cercle Canton Oyem", members: 89, nextMeeting: "30 Jan 2025" },
-  { name: "Cercle Canton Minvoul", members: 34, nextMeeting: "1 Fév 2025" }
+  { 
+    name: "Cercle Canton Kyé", 
+    members: 45, 
+    nextMeeting: "25 Jan 2025",
+    image: cercleKye,
+    status: "Actif"
+  },
+  { 
+    name: "Cercle Canton Mitzic", 
+    members: 62, 
+    nextMeeting: "28 Jan 2025",
+    image: cercleMitzic,
+    status: "Actif"
+  },
+  { 
+    name: "Cercle Canton Oyem", 
+    members: 89, 
+    nextMeeting: "30 Jan 2025",
+    image: cercleOyem,
+    status: "Populaire"
+  },
+  { 
+    name: "Cercle Canton Minvoul", 
+    members: 34, 
+    nextMeeting: "1 Fév 2025",
+    image: cercleMinvoul,
+    status: "Nouveau"
+  }
 ];
 
 const benefits = [
-  "Participer aux décisions locales",
-  "Proposer des projets pour votre canton",
-  "Suivre l'avancement des travaux",
-  "Rencontrer vos élus"
+  { text: "Participer aux décisions locales", icon: "🗳️" },
+  { text: "Proposer des projets pour votre canton", icon: "💡" },
+  { text: "Suivre l'avancement des travaux", icon: "📊" },
+  { text: "Rencontrer vos élus", icon: "🤝" }
 ];
 
 export const WoleuCitizenEngagement: React.FC = () => {
@@ -34,15 +62,22 @@ export const WoleuCitizenEngagement: React.FC = () => {
     }
     
     setIsSubmitting(true);
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsSubmitting(false);
     setEmail('');
     toast.success("Inscription réussie ! Vous recevrez bientôt des informations sur les Cercles Citoyens.");
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Populaire": return "bg-amber-500 text-white";
+      case "Nouveau": return "bg-green-500 text-white";
+      default: return "bg-white/20 text-white";
+    }
+  };
+
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
         <img 
@@ -50,76 +85,103 @@ export const WoleuCitizenEngagement: React.FC = () => {
           alt="Cercle citoyen" 
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-green-800/95 via-green-900/90 to-green-900/95" />
+        <div className="absolute inset-0 bg-gradient-to-br from-green-900/95 via-green-800/90 to-green-900/95" />
       </div>
+
       <div className="container mx-auto px-4 relative z-10 text-white">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left side - Content */}
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
+            <Users className="w-4 h-4" />
+            Démocratie participative
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold font-serif mb-4">
+            Votre voix compte :<br />
+            <span className="text-amber-400">Les Cercles Citoyens</span>
+          </h2>
+          <p className="text-lg text-white/80 max-w-2xl mx-auto">
+            La politique se fait désormais avec vous. Rejoignez les assemblées locales 
+            pour décider des projets de votre canton.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left side - Benefits & Signup */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm font-medium mb-6">
-              <Users className="w-4 h-4" />
-              Démocratie participative
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">
-              Votre voix compte :<br />
-              <span className="text-amber-400">Les Cercles Citoyens</span>
-            </h2>
-
-            <p className="text-lg text-white/80 mb-8 leading-relaxed">
-              La politique se fait désormais avec vous. Rejoignez les assemblées locales 
-              pour décider des projets de votre canton et participer activement 
-              à la transformation du Woleu.
-            </p>
-
-            {/* Benefits */}
-            <div className="space-y-3 mb-8">
+            {/* Benefits cards */}
+            <div className="grid grid-cols-2 gap-4 mb-8">
               {benefits.map((benefit, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-3"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-amber-400 flex-shrink-0" />
-                  <span>{benefit}</span>
+                  <Card className="bg-white/10 border-white/20 backdrop-blur-sm hover:bg-white/15 transition-all group">
+                    <CardContent className="p-4 text-center">
+                      <span className="text-3xl mb-2 block group-hover:scale-110 transition-transform">{benefit.icon}</span>
+                      <span className="text-sm text-white/90">{benefit.text}</span>
+                    </CardContent>
+                  </Card>
                 </motion.div>
               ))}
             </div>
 
-            {/* Signup form */}
-            <form onSubmit={handleSubmit} className="flex gap-3">
-              <Input
-                type="email"
-                placeholder="Votre adresse email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50 focus-visible:ring-amber-400"
-              />
-              <Button 
-                type="submit"
-                className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <span className="animate-spin">⏳</span>
-                ) : (
-                  <>
-                    <Send className="mr-2 h-4 w-4" />
-                    Rejoindre
-                  </>
-                )}
-              </Button>
-            </form>
+            {/* Signup card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <Card className="bg-gradient-to-br from-amber-500/20 to-amber-600/10 border-amber-400/30 backdrop-blur-md">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="w-5 h-5 text-amber-400" />
+                    <h3 className="font-semibold text-lg text-white">Rejoindre un Cercle</h3>
+                  </div>
+                  <p className="text-white/70 text-sm mb-4">
+                    Inscrivez-vous pour recevoir les informations sur les prochaines réunions citoyennes.
+                  </p>
+                  <form onSubmit={handleSubmit} className="flex gap-3">
+                    <Input
+                      type="email"
+                      placeholder="Votre adresse email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50 focus-visible:ring-amber-400"
+                    />
+                    <Button 
+                      type="submit"
+                      className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <span className="animate-spin">⏳</span>
+                      ) : (
+                        <>
+                          <Send className="mr-2 h-4 w-4" />
+                          Rejoindre
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </motion.div>
           </motion.div>
 
-          {/* Right side - Circles list */}
+          {/* Right side - Circles with images */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -127,41 +189,56 @@ export const WoleuCitizenEngagement: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-amber-400" />
-              Cercles actifs dans le Woleu
-            </h3>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-amber-400" />
+                Cercles actifs dans le Woleu
+              </h3>
+              <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
+                4 cercles actifs
+              </Badge>
+            </div>
 
-            {circles.map((circle, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 + index * 0.1 }}
-              >
-                <Card className="bg-white/10 border-white/20 hover:bg-white/15 transition-colors cursor-pointer">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-semibold text-white">{circle.name}</h4>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-white/70">
-                          <span className="flex items-center gap-1">
-                            <Users className="w-3 h-3" />
-                            {circle.members} membres
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {circle.nextMeeting}
-                          </span>
+            <div className="grid grid-cols-2 gap-4">
+              {circles.map((circle, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                >
+                  <Card className="overflow-hidden bg-white/5 border-white/10 hover:bg-white/10 transition-all cursor-pointer group h-full">
+                    {/* Image */}
+                    <div className="relative h-32 overflow-hidden">
+                      <img 
+                        src={circle.image} 
+                        alt={circle.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                      <Badge className={`absolute top-2 right-2 text-xs ${getStatusColor(circle.status)}`}>
+                        {circle.status}
+                      </Badge>
+                    </div>
+                    
+                    <CardContent className="p-4">
+                      <h4 className="font-semibold text-white text-sm mb-2 line-clamp-1">{circle.name}</h4>
+                      <div className="space-y-1 text-xs text-white/70">
+                        <div className="flex items-center gap-1">
+                          <Users className="w-3 h-3" />
+                          {circle.members} membres
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {circle.nextMeeting}
                         </div>
                       </div>
-                      <ArrowRight className="w-5 h-5 text-white/50" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
 
             <Button 
               variant="outline" 
