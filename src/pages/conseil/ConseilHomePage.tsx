@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Building2, MapPin, Users, Phone, Mail, Globe, 
   Calendar, Shield, TrendingUp, Wallet, LogIn,
   Eye, FileText, Award, ChevronRight, ArrowLeft,
-  Clock, CheckCircle2, AlertCircle
+  Clock, CheckCircle2, AlertCircle, Newspaper,
+  GraduationCap, PlayCircle, ListChecks, BookOpen, 
+  Bell, Video, ExternalLink, Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +26,29 @@ import {
   type ProvinceDetail
 } from '@/lib/departments-data';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+
+// Mock data for news
+const mockActualites = [
+  { id: 1, title: "Session budgétaire Q1 2026", date: "2026-01-15", category: "Session", excerpt: "Adoption du budget primitif pour l'exercice 2026." },
+  { id: 2, title: "Inauguration de la mairie annexe", date: "2026-01-10", category: "Infrastructure", excerpt: "Le président a inauguré la nouvelle mairie annexe." },
+  { id: 3, title: "Programme de formation des agents", date: "2026-01-05", category: "Formation", excerpt: "Lancement du programme de renforcement des capacités." },
+];
+
+// Mock data for tutorials
+const mockTutoriels = [
+  { id: 1, title: "Comment accéder au portail citoyen", duration: "5 min", icon: PlayCircle },
+  { id: 2, title: "Demander un document administratif", duration: "8 min", icon: FileText },
+  { id: 3, title: "Suivre l'état de ma demande", duration: "3 min", icon: ListChecks },
+  { id: 4, title: "Consulter les délibérations", duration: "4 min", icon: BookOpen },
+];
+
+// Mock data for processes
+const mockProcessus = [
+  { id: 1, title: "Demande d'extrait de naissance", steps: 4, duration: "24h" },
+  { id: 2, title: "Permis de construire", steps: 7, duration: "30 jours" },
+  { id: 3, title: "Inscription sur les listes électorales", steps: 3, duration: "48h" },
+  { id: 4, title: "Demande d'aide sociale", steps: 5, duration: "15 jours" },
+];
 
 export const ConseilHomePage: React.FC = () => {
   const { departmentId } = useParams<{ departmentId: string }>();
@@ -96,7 +121,7 @@ export const ConseilHomePage: React.FC = () => {
           <CardContent>
             <Button 
               className="w-full" 
-              onClick={() => navigate('/demo')}
+              onClick={() => navigate('/conseils')}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour à la carte des conseils
@@ -114,13 +139,12 @@ export const ConseilHomePage: React.FC = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => navigate('/demo')}
+              <Link 
+                to="/conseils"
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
               >
                 <ArrowLeft className="h-5 w-5" />
-              </Button>
+              </Link>
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-lg ${province.color} flex items-center justify-center`}>
                   <Building2 className="h-5 w-5 text-white" />
@@ -144,10 +168,31 @@ export const ConseilHomePage: React.FC = () => {
       {/* Main content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-3">
-            <TabsTrigger value="accueil">Accueil</TabsTrigger>
-            <TabsTrigger value="connexion">Connexion</TabsTrigger>
-            <TabsTrigger value="infos">Informations</TabsTrigger>
+          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-6">
+            <TabsTrigger value="accueil" className="gap-1 text-xs">
+              <Home className="h-4 w-4" />
+              <span className="hidden sm:inline">Accueil</span>
+            </TabsTrigger>
+            <TabsTrigger value="actualites" className="gap-1 text-xs">
+              <Newspaper className="h-4 w-4" />
+              <span className="hidden sm:inline">Actualités</span>
+            </TabsTrigger>
+            <TabsTrigger value="sensibilisation" className="gap-1 text-xs">
+              <Bell className="h-4 w-4" />
+              <span className="hidden sm:inline">Sensibilisation</span>
+            </TabsTrigger>
+            <TabsTrigger value="tutoriels" className="gap-1 text-xs">
+              <Video className="h-4 w-4" />
+              <span className="hidden sm:inline">Tutoriels</span>
+            </TabsTrigger>
+            <TabsTrigger value="processus" className="gap-1 text-xs">
+              <ListChecks className="h-4 w-4" />
+              <span className="hidden sm:inline">Processus</span>
+            </TabsTrigger>
+            <TabsTrigger value="demo" className="gap-1 text-xs">
+              <PlayCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">Démo</span>
+            </TabsTrigger>
           </TabsList>
 
           {/* Accueil Tab */}
@@ -192,7 +237,7 @@ export const ConseilHomePage: React.FC = () => {
               <Button 
                 size="lg" 
                 className="gap-2"
-                onClick={() => setActiveTab('connexion')}
+                onClick={() => setActiveTab('demo')}
               >
                 <LogIn className="h-5 w-5" />
                 Se connecter au portail
@@ -238,17 +283,17 @@ export const ConseilHomePage: React.FC = () => {
                 <CardDescription>Services publics et informations</CardDescription>
               </CardHeader>
               <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <Button variant="outline" className="h-auto py-4 flex-col gap-2">
-                  <FileText className="h-6 w-6" />
-                  <span className="text-xs">Délibérations</span>
+                <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('actualites')}>
+                  <Newspaper className="h-6 w-6" />
+                  <span className="text-xs">Actualités</span>
                 </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col gap-2">
-                  <Calendar className="h-6 w-6" />
-                  <span className="text-xs">Sessions</span>
+                <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('processus')}>
+                  <ListChecks className="h-6 w-6" />
+                  <span className="text-xs">Démarches</span>
                 </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col gap-2">
-                  <Eye className="h-6 w-6" />
-                  <span className="text-xs">Transparence</span>
+                <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => setActiveTab('tutoriels')}>
+                  <Video className="h-6 w-6" />
+                  <span className="text-xs">Tutoriels</span>
                 </Button>
                 <Button variant="outline" className="h-auto py-4 flex-col gap-2">
                   <Phone className="h-6 w-6" />
@@ -256,10 +301,296 @@ export const ConseilHomePage: React.FC = () => {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Contact info */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5" />
+                    Informations générales
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Département</span>
+                    <span className="font-medium">{department.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Code</span>
+                    <span className="font-mono">{department.code}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Chef-lieu</span>
+                    <span className="font-medium">{department.chefLieu}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Province</span>
+                    <span className="font-medium">{province.name}</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Phone className="h-5 w-5" />
+                    Contact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">contact@{departmentId}.conseil.ga</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">+241 XX XX XX XX</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">{departmentId}.conseil.ga</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">Hôtel du Département, {department.chefLieu}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
-          {/* Connexion Tab */}
-          <TabsContent value="connexion" className="space-y-6">
+          {/* Actualités Tab */}
+          <TabsContent value="actualites" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-4"
+            >
+              <Newspaper className="h-12 w-12 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl font-bold mb-2">Actualités du Conseil</h2>
+              <p className="text-muted-foreground">Suivez les dernières nouvelles de votre département</p>
+            </motion.div>
+
+            <div className="grid gap-4">
+              {mockActualites.map((actu, index) => (
+                <motion.div
+                  key={actu.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="outline">{actu.category}</Badge>
+                            <span className="text-sm text-muted-foreground">{actu.date}</span>
+                          </div>
+                          <h3 className="font-semibold mb-1">{actu.title}</h3>
+                          <p className="text-sm text-muted-foreground">{actu.excerpt}</p>
+                        </div>
+                        <Button variant="ghost" size="icon">
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Button variant="outline">
+                Voir toutes les actualités
+                <ChevronRight className="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+          </TabsContent>
+
+          {/* Sensibilisation Tab */}
+          <TabsContent value="sensibilisation" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-4"
+            >
+              <Bell className="h-12 w-12 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl font-bold mb-2">Campagnes de Sensibilisation</h2>
+              <p className="text-muted-foreground">Informations importantes pour les citoyens</p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card className="border-primary/50 bg-primary/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <GraduationCap className="h-5 w-5" />
+                    Éducation civique
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Comprendre le fonctionnement de votre conseil départemental et vos droits en tant que citoyen.
+                  </p>
+                  <Button variant="outline" size="sm">En savoir plus</Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-green-500/50 bg-green-500/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Shield className="h-5 w-5" />
+                    Santé publique
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Campagnes de vaccination et informations sanitaires pour la population.
+                  </p>
+                  <Button variant="outline" size="sm">En savoir plus</Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-yellow-500/50 bg-yellow-500/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Eye className="h-5 w-5" />
+                    Transparence
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Accédez aux délibérations, budgets et décisions du conseil en toute transparence.
+                  </p>
+                  <Button variant="outline" size="sm">Consulter</Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-blue-500/50 bg-blue-500/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Users className="h-5 w-5" />
+                    Participation citoyenne
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Comment participer aux décisions locales et faire entendre votre voix.
+                  </p>
+                  <Button variant="outline" size="sm">Participer</Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Tutoriels Tab */}
+          <TabsContent value="tutoriels" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-4"
+            >
+              <Video className="h-12 w-12 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl font-bold mb-2">Tutoriels vidéo</h2>
+              <p className="text-muted-foreground">Apprenez à utiliser les services numériques du département</p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {mockTutoriels.map((tuto, index) => (
+                <motion.div
+                  key={tuto.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer group">
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                          <tuto.icon className="h-8 w-8 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold mb-1">{tuto.title}</h3>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            <span>{tuto.duration}</span>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="icon">
+                          <PlayCircle className="h-6 w-6 text-primary" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Processus Tab */}
+          <TabsContent value="processus" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-4"
+            >
+              <ListChecks className="h-12 w-12 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl font-bold mb-2">Démarches administratives</h2>
+              <p className="text-muted-foreground">Toutes les procédures et leurs étapes</p>
+            </motion.div>
+
+            <div className="grid gap-4">
+              {mockProcessus.map((proc, index) => (
+                <motion.div
+                  key={proc.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                            <FileText className="h-6 w-6 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{proc.title}</h3>
+                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                              <span className="flex items-center gap-1">
+                                <ListChecks className="h-3 w-3" /> {proc.steps} étapes
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" /> {proc.duration}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <Button variant="outline" size="sm">
+                          Commencer
+                          <ChevronRight className="h-4 w-4 ml-1" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Demo Tab (Connexion) */}
+          <TabsContent value="demo" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-4"
+            >
+              <PlayCircle className="h-12 w-12 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl font-bold mb-2">Démonstration du portail</h2>
+              <p className="text-muted-foreground">Testez le système de gestion du conseil départemental</p>
+            </motion.div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Login form */}
               <Card>
@@ -370,91 +701,6 @@ export const ConseilHomePage: React.FC = () => {
               </Card>
             </div>
           </TabsContent>
-
-          {/* Infos Tab */}
-          <TabsContent value="infos" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5" />
-                    Informations générales
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Département</span>
-                    <span className="font-medium">{department.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Code</span>
-                    <span className="font-mono">{department.code}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Chef-lieu</span>
-                    <span className="font-medium">{department.chefLieu}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Province</span>
-                    <span className="font-medium">{province.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Communes</span>
-                    <span className="font-medium">{department.communes.join(', ')}</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Phone className="h-5 w-5" />
-                    Contact
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">contact@{departmentId}.conseil.ga</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">+241 XX XX XX XX</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{departmentId}.conseil.ga</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">Hôtel du Département, {department.chefLieu}</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="md:col-span-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Shield className="h-5 w-5" />
-                    Compétences transférées ({department.activeCompetences}/23)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {department.prioritySectors.map((sector, i) => (
-                      <Badge 
-                        key={sector} 
-                        variant={i < 3 ? 'default' : 'secondary'}
-                      >
-                        <CheckCircle2 className="h-3 w-3 mr-1" />
-                        {sector.replace('_', ' ')}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
         </Tabs>
       </main>
 
@@ -474,3 +720,5 @@ export const ConseilHomePage: React.FC = () => {
     </div>
   );
 };
+
+export default ConseilHomePage;

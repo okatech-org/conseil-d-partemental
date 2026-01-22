@@ -28,7 +28,8 @@ export const DemoMapPage: React.FC = () => {
   };
 
   const handleAccessCouncil = (deptId: string) => {
-    navigate(`/conseil/${deptId}`);
+    // Open in new tab
+    window.open(`/conseil/${deptId}`, '_blank', 'noopener,noreferrer');
   };
 
   return (

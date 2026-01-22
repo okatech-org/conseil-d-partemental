@@ -328,9 +328,9 @@ const MapboxGabonMap: React.FC<MapboxGabonMapProps> = ({
     };
   }, [mapboxToken, addDepartmentMarkers]);
 
-  // Handle login navigation
+  // Handle login navigation - opens in new tab
   const handleAccessCouncil = (deptId: string) => {
-    navigate(`/conseil/${deptId}`);
+    window.open(`/conseil/${deptId}`, '_blank', 'noopener,noreferrer');
   };
 
   // Reset view
