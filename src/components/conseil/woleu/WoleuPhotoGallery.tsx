@@ -112,46 +112,71 @@ export const WoleuPhotoGallery: React.FC = () => {
         ))}
       </div>
 
-      {/* Gallery Grid */}
+      {/* Compact Gallery Grid - Masonry-like layout */}
       <motion.div 
         layout
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+        className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1 auto-rows-[80px] md:auto-rows-[100px] lg:auto-rows-[120px]"
       >
         <AnimatePresence mode="popLayout">
-          {filteredImages.map((image, index) => (
-            <motion.div
-              key={image.src}
-              layout
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3 }}
-              className="relative aspect-square group cursor-pointer overflow-hidden rounded-xl shadow-lg"
-              onClick={() => openLightbox(index)}
-            >
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Zoom icon */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <ZoomIn className="w-7 h-7 text-white" />
+          {filteredImages.map((image, index) => {
+            // Create varied spans for visual interest while keeping it compact
+            const spanPatterns = [
+              { col: 2, row: 2 }, // Large square
+              { col: 2, row: 1 }, // Wide
+              { col: 1, row: 2 }, // Tall
+              { col: 2, row: 2 }, // Large square
+              { col: 1, row: 1 }, // Small
+              { col: 2, row: 1 }, // Wide
+              { col: 1, row: 1 }, // Small
+              { col: 1, row: 2 }, // Tall
+              { col: 2, row: 1 }, // Wide
+              { col: 1, row: 1 }, // Small
+              { col: 2, row: 2 }, // Large square
+              { col: 1, row: 1 }, // Small
+            ];
+            const pattern = spanPatterns[index % spanPatterns.length];
+            
+            return (
+              <motion.div
+                key={image.src}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.2, delay: index * 0.03 }}
+                className="relative group cursor-pointer overflow-hidden rounded-md shadow-md"
+                style={{
+                  gridColumn: `span ${pattern.col}`,
+                  gridRow: `span ${pattern.row}`,
+                }}
+                onClick={() => openLightbox(index)}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-105"
+                />
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                
+                {/* Zoom icon */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <ZoomIn className="w-5 h-5 text-white" />
+                  </div>
                 </div>
-              </div>
-              
-              {/* Category badge */}
-              <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="inline-block px-3 py-1 bg-green-600/90 text-white text-xs font-medium rounded-full">
-                  {image.category}
-                </span>
-              </div>
-            </motion.div>
-          ))}
+                
+                {/* Category badge - only on larger cells */}
+                {(pattern.col >= 2 || pattern.row >= 2) && (
+                  <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="inline-block px-2 py-0.5 bg-green-600/90 text-white text-[10px] font-medium rounded-full">
+                      {image.category}
+                    </span>
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
         </AnimatePresence>
       </motion.div>
 
