@@ -26,6 +26,7 @@ import { WoleuChantiersPage } from "./pages/conseil/woleu/WoleuChantiersPage";
 import { WoleuTransparentPage } from "./pages/conseil/woleu/WoleuTransparentPage";
 import { WoleuCerclesPage } from "./pages/conseil/woleu/WoleuCerclesPage";
 import { WoleuDecouvrirPage } from "./pages/conseil/woleu/WoleuDecouvrirPage";
+import { WoleuAuthPage } from "./pages/conseil/woleu/WoleuAuthPage";
 
 // Public pages
 import { HomePage } from "./pages/public/HomePage";
@@ -67,6 +68,7 @@ const App = () => (
               <Route path="/conseil/woleu/transparent" element={<WoleuTransparentPage />} />
               <Route path="/conseil/woleu/cercles" element={<WoleuCerclesPage />} />
               <Route path="/conseil/woleu/decouvrir" element={<WoleuDecouvrirPage />} />
+              <Route path="/conseil/woleu/connexion" element={<WoleuAuthPage />} />
               
               {/* Individual departmental council pages */}
               <Route path="/conseil/:departmentId" element={<ConseilHomePage />} />
