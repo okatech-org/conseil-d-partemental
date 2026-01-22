@@ -3,12 +3,14 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Building2, MapPin, Users, Phone, Mail, Globe, 
-  Shield, TrendingUp, Wallet, LogIn,
+  Shield, TrendingUp, Wallet, LogIn, UserPlus,
   FileText, Award, ChevronRight, ArrowLeft,
-  Clock, AlertCircle, Newspaper,
+  Clock, AlertCircle, Newspaper, Menu, Sun, Moon,
   PlayCircle, ListChecks, BookOpen, 
-  Bell, Video, Home
+  Bell, Video, Home, Map
 } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,7 +22,6 @@ import {
   type DepartmentDetail,
   type ProvinceDetail
 } from '@/lib/departments-data';
-import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { DemoAccessProfiles } from '@/components/demo/DemoAccessProfiles';
 
 // Mock data for news
@@ -46,6 +47,17 @@ const mockProcessus = [
   { id: 4, title: "Demande d'aide sociale", steps: 5, duration: "15 jours" },
 ];
 
+// Navigation items matching main landing page
+const navItems = [
+  { label: "Accueil", value: "accueil", icon: Home },
+  { label: "Conseils", href: "/conseils", icon: Map },
+  { label: "Actualités", value: "actualites", icon: Newspaper },
+  { label: "Sensibilisation", value: "sensibilisation", icon: Bell },
+  { label: "Tutoriels", value: "tutoriels", icon: Video },
+  { label: "Processus", value: "processus", icon: ListChecks },
+  { label: "Démo", value: "demo", icon: PlayCircle }
+];
+
 export const ConseilHomePage: React.FC = () => {
   const { departmentId } = useParams<{ departmentId: string }>();
   const navigate = useNavigate();
@@ -53,6 +65,13 @@ export const ConseilHomePage: React.FC = () => {
   const [province, setProvince] = useState<ProvinceDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('accueil');
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (departmentId) {
@@ -102,33 +121,161 @@ export const ConseilHomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
+      {/* Header - Same style as main landing page */}
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur-md shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Logo & Title */}
             <div className="flex items-center gap-3">
-              <Link 
-                to="/conseils"
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Link>
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-lg ${province.color} flex items-center justify-center`}>
-                  <Building2 className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="font-bold text-lg leading-tight">CD {department.name}</h1>
-                  <p className="text-xs text-muted-foreground">{province.name} • {department.chefLieu}</p>
-                </div>
+              <div className={`w-10 h-10 rounded-xl ${province.color} flex items-center justify-center`}>
+                <Building2 className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h1 className="font-bold text-base sm:text-lg leading-tight">Conseil Départemental de {department.name}</h1>
+                <p className="text-xs text-muted-foreground">{province.name} • {department.chefLieu}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
+
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-1">
+              {navItems.map((item) => (
+                item.href ? (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className="px-4 py-2 text-sm font-medium rounded-lg transition-colors text-foreground hover:bg-muted"
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <button
+                    key={item.label}
+                    onClick={() => setActiveTab(item.value!)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      activeTab === item.value 
+                        ? "bg-primary text-primary-foreground" 
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                )
+              ))}
+            </nav>
+
+            {/* Auth Buttons & Theme Toggle - Desktop */}
+            <div className="hidden lg:flex items-center gap-3">
+              {mounted && (
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                  aria-label="Toggle theme"
+                >
+                  <Sun className={`h-5 w-5 transition-all duration-300 ${resolvedTheme === 'dark' ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
+                  <Moon className={`absolute h-5 w-5 transition-all duration-300 ${resolvedTheme === 'dark' ? "rotate-90 scale-0" : "rotate-0 scale-100"}`} />
+                </Button>
+              )}
               <Badge variant={department.status === 'operational' ? 'default' : 'secondary'}>
                 {department.status === 'operational' ? '✓ Opérationnel' : '⟳ Transition'}
               </Badge>
+              <Button variant="ghost" size="sm">
+                <LogIn className="mr-2 h-4 w-4" />
+                Connexion
+              </Button>
+              <Button size="sm" className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
+                <UserPlus className="mr-2 h-4 w-4" />
+                Inscription
+              </Button>
             </div>
+
+            {/* Mobile Menu */}
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild className="lg:hidden">
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className={`w-10 h-10 rounded-xl ${province.color} flex items-center justify-center`}>
+                      <Building2 className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-bold">CD {department.name}</div>
+                      <div className="text-xs text-muted-foreground">{province.name}</div>
+                    </div>
+                  </div>
+
+                  <nav className="flex-1 space-y-1">
+                    {navItems.map((item) => {
+                      const Icon = item.icon;
+                      return item.href ? (
+                        <Link
+                          key={item.label}
+                          to={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          className="flex items-center gap-3 px-4 py-3 text-foreground hover:bg-muted rounded-lg transition-colors"
+                        >
+                          <Icon className="h-5 w-5" />
+                          {item.label}
+                        </Link>
+                      ) : (
+                        <button
+                          key={item.label}
+                          onClick={() => {
+                            setActiveTab(item.value!);
+                            setMobileOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                            activeTab === item.value 
+                              ? "bg-primary text-primary-foreground" 
+                              : "text-foreground hover:bg-muted"
+                          }`}
+                        >
+                          <Icon className="h-5 w-5" />
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </nav>
+
+                  <div className="space-y-3 pt-6 border-t border-border">
+                    <Badge variant={department.status === 'operational' ? 'default' : 'secondary'} className="w-full justify-center">
+                      {department.status === 'operational' ? '✓ Opérationnel' : '⟳ Transition'}
+                    </Badge>
+                    {mounted && (
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start"
+                        onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                      >
+                        {resolvedTheme === 'dark' ? (
+                          <>
+                            <Sun className="mr-2 h-4 w-4" />
+                            Mode clair
+                          </>
+                        ) : (
+                          <>
+                            <Moon className="mr-2 h-4 w-4" />
+                            Mode sombre
+                          </>
+                        )}
+                      </Button>
+                    )}
+                    <Button variant="outline" className="w-full" onClick={() => setMobileOpen(false)}>
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Connexion
+                    </Button>
+                    <Button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" onClick={() => setMobileOpen(false)}>
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Inscription
+                    </Button>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
@@ -136,32 +283,6 @@ export const ConseilHomePage: React.FC = () => {
       {/* Main content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-6">
-            <TabsTrigger value="accueil" className="gap-1 text-xs">
-              <Home className="h-4 w-4" />
-              <span className="hidden sm:inline">Accueil</span>
-            </TabsTrigger>
-            <TabsTrigger value="actualites" className="gap-1 text-xs">
-              <Newspaper className="h-4 w-4" />
-              <span className="hidden sm:inline">Actualités</span>
-            </TabsTrigger>
-            <TabsTrigger value="sensibilisation" className="gap-1 text-xs">
-              <Bell className="h-4 w-4" />
-              <span className="hidden sm:inline">Sensibilisation</span>
-            </TabsTrigger>
-            <TabsTrigger value="tutoriels" className="gap-1 text-xs">
-              <Video className="h-4 w-4" />
-              <span className="hidden sm:inline">Tutoriels</span>
-            </TabsTrigger>
-            <TabsTrigger value="processus" className="gap-1 text-xs">
-              <ListChecks className="h-4 w-4" />
-              <span className="hidden sm:inline">Processus</span>
-            </TabsTrigger>
-            <TabsTrigger value="demo" className="gap-1 text-xs">
-              <PlayCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">Démo</span>
-            </TabsTrigger>
-          </TabsList>
 
           {/* Accueil Tab */}
           <TabsContent value="accueil" className="space-y-6">
